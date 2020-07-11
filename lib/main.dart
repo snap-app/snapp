@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class Calculator {
-  static double getMaxBenefit(double householdSize) {
+  static double getMaxBenefit(int householdSize) {
     if (householdSize >= 8) {
-      return (1164 + (householdSize - 8) * 146);
+      return (1164 + (householdSize - 8.0) * 146);
     } else if (householdSize == 7) {
       return 1018;
     } else if (householdSize == 6) {
@@ -25,11 +25,11 @@ class Calculator {
   static double threeInputCalc(
       double maxBenefit, double monthlyIncome, double totalDeductions) {
     double adjustedIncome = 0;
-    if (monthlyIncome > 0) {
-      adjustedIncome = monthlyIncome;
+    if (monthlyIncome - totalDeductions > 0) {
+      adjustedIncome = monthlyIncome - totalDeductions;
     }
     double calculatedBenefit =
-        maxBenefit - (adjustedIncome - totalDeductions) * .3;
+        maxBenefit - (adjustedIncome) * .3;
     if (calculatedBenefit < 0) return 0;
     if (calculatedBenefit > maxBenefit)
       return maxBenefit;
@@ -37,9 +37,92 @@ class Calculator {
       return calculatedBenefit;
   }
 
-  static double deductionNewYorkCalc() {
-    return 1.0;
+  static double getStandardDeduction(int familySize) {
+    if (familySize <= 3)
+      return 167;
+    if (familySize == 4)
+      return 178;
+    if (familySize == 5)
+      return 209;
+    if (familySize >= 6)
+      return 240;
+    else
+      return 0;
   }
+
+  static double getHomelessDeduction(bool homelessness) {
+    if (homelessness) {
+      return 152.06;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  static double getAdjustsedMedicalDeduction(double medicalExpenses) {
+    if (medicalExpenses > 35.0)
+      return medicalExpenses;
+    else
+      return 0;
+  }
+
+  static double getStandardUtilityAllowanacesNewYork(String area, String level) {
+    if (area == 'newYorkCity') {
+      if (level == 'heatingAndCooling') {
+        return 800;
+      }
+      if (level == 'utilities') {
+        return 316;
+      }
+      if (level == 'telephone') {
+        return 30;
+      }
+    }
+    if (area == 'nassauAndSuffolk') {
+      if (level == 'heatingAndCooling') {
+        return 744;
+      }
+      if (level == 'utilities') {
+        return 292;
+      }
+      if (level == 'telephone') {
+        return 30;
+      }
+    }
+    if (area == 'restOfState') {
+      if (level == 'heatingAndCooling') {
+        return 661;
+      }
+      if (level == 'utilities') {
+        return 268;
+      }
+      if (level == 'telephone') {
+        return 30;
+      }
+    }
+    return 0;
+  }
+
+  static double deductionNewYorkCalc(double monthlyChildSupport, double earnedIncome, int householdSize, double dependentCare, bool homelessness, double medicalExpenses) {
+    return monthlyChildSupport + earnedIncome * .2 +  getStandardDeduction(householdSize) + dependentCare + getHomelessDeduction(homelessness) + getAdjustsedMedicalDeduction(medicalExpenses);
+  }
+
+  static double getShelterExcessNewYork(double adjustedIncome, double rentOrMortgage, double standardUtilityAllowance, double otherShelterExpenses, bool disabledOrElderly) {
+    double totalShelterExpenses = rentOrMortgage + standardUtilityAllowance + otherShelterExpenses;
+    if (adjustedIncome/2 - totalShelterExpenses > 569 && disabledOrElderly)
+      return adjustedIncome/2 - totalShelterExpenses;
+    else if (adjustedIncome/2 - totalShelterExpenses > 569 && !disabledOrElderly)
+      return 569;
+    else if (adjustedIncome/2 - totalShelterExpenses <= 0)
+      return 0;
+    else
+      return adjustedIncome/2 - totalShelterExpenses;
+  }
+
+  static double newYorkCalculation(double maxBenefit, double grossIncome, double totalDeductions, double shelterExcess) {
+    return threeInputCalc(maxBenefit, grossIncome, totalDeductions + shelterExcess);
+  }
+
 }
 
 class MyApp extends StatelessWidget {
@@ -67,11 +150,32 @@ class Model {
   double monthlyIncome;
   double yourBenefit;
   double yourDeduction;
+  double yourStandardDeduction;
+  bool yourHomelessnessStatus;
+  double yourDependentCareCosts;
+  double yourMedicalExpenses;
+  double yourEarnedIncome;
+  double yourRentOrMortgage;
+  double yourStandardUtilityAllowance;
+  double yourOtherShelterCosts;
+  double yourShelterExcess;
+  double yourNetIncome;
+
   Model() {
     yourMax = 0;
     monthlyIncome = 0;
     yourBenefit = 0;
     yourDeduction = 0;
+    yourStandardDeduction = 0;
+    yourHomelessnessStatus = false;
+    yourDependentCareCosts = 0;
+    yourMedicalExpenses = 0;
+    yourEarnedIncome = 0;
+    yourRentOrMortgage = 0;
+    yourStandardUtilityAllowance = 0;
+    yourOtherShelterCosts = 0;
+    yourShelterExcess = 0;
+    yourNetIncome = 0;
   }
   updateBenefit() {
     yourBenefit =
@@ -348,7 +452,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                               numOfPeople.contains(new RegExp(r'[a-z]')))) {
                             setState(() {
                               model.yourMax = Calculator.getMaxBenefit(
-                                  double.parse(numOfPeople));
+                                  int.parse(numOfPeople));
                               model.updateBenefit();
                             });
                           }
@@ -451,7 +555,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       numOfPeople.contains(new RegExp(r'[a-z]')))) {
                     setState(() {
                       model.yourMax =
-                          Calculator.getMaxBenefit(double.parse(numOfPeople));
+                          Calculator.getMaxBenefit(int.parse(numOfPeople));
                       model.updateBenefit();
                     });
                   }
