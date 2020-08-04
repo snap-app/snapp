@@ -99,17 +99,15 @@ class Calculator {
     return 0;
   }
 
-  static double getStandardUtilityAllowanacesNewYorkArea(
-      String area) {
+  static double getStandardUtilityAllowanacesNewYorkArea(String area) {
     if (area == 'New York City') {
-        return 800.0 + 316 + 30;
+      return 800.0 + 316 + 30;
     }
     if (area == 'Nassau & Suffolk Counties') {
-        return 744.0+292 + 30;
+      return 744.0 + 292 + 30;
     }
     if (area == 'Rest of State') {
-
-        return 661.0 + 268 + 30;
+      return 661.0 + 268 + 30;
     }
     return 0;
   }
@@ -128,13 +126,17 @@ class Calculator {
         getHomelessDeduction(homelessness) +
         getAdjustsedMedicalDeduction(medicalExpenses);
   }
-  static double getMonthlyGrossIncomeTestNY(int householdSize, double dependentCare, double earnedIncome, )
-  {
+
+  static double getMonthlyGrossIncomeTestNY(
+    int householdSize,
+    double dependentCare,
+    double earnedIncome,
+  ) {
     //TODO: Put all the values in. Read the literature to know what it means/what bearing it has on the calculator.
-    if (householdSize == 1)
-      return 0;
+    if (householdSize == 1) return 0;
     return 0;
   }
+
   static double getShelterExcessNewYork(
       double adjustedIncome,
       double rentOrMortgage,
@@ -160,23 +162,41 @@ class Calculator {
         maxBenefit, grossIncome, totalDeductions + shelterExcess);
   }
 
-  static double advancedDeductionCalculation(double unearnedIncome, double earnedIncome, double childSupport, int householdSize, double dependentCare, bool homelessnessStatus, double medicalExpenses, double rentOrMortgage, String location, double otherShelter, bool disabledOrElderly) {
-      double grossIncome = unearnedIncome + earnedIncome;
-      double adjustedGrossIncome = grossIncome - childSupport;
-      double earnedIncomeDeduction = earnedIncome * .2;
-      double standardDeduction = getStandardDeduction(householdSize);
-      double dependentCareDeduction = dependentCare;
-      double homelessDeduction = getHomelessDeduction(homelessnessStatus);
-      double medicalDeduction = getAdjustsedMedicalDeduction(medicalExpenses);
-      double totalDeduction = earnedIncomeDeduction + standardDeduction + dependentCareDeduction + homelessDeduction + medicalDeduction;
-      double adjustedIncome = adjustedGrossIncome - totalDeduction;
-      if (adjustedIncome <= 0)
-        adjustedIncome = 0;
-      double shelterExcess = getShelterExcessNewYork(adjustedGrossIncome, rentOrMortgage, getStandardUtilityAllowanacesNewYorkArea(location), otherShelter, disabledOrElderly);
-      double netIncome = adjustedIncome - shelterExcess;
-      return getMaxBenefit(householdSize) - netIncome * .3;
+  static double advancedDeductionCalculation(
+      double unearnedIncome,
+      double earnedIncome,
+      double childSupport,
+      int householdSize,
+      double dependentCare,
+      bool homelessnessStatus,
+      double medicalExpenses,
+      double rentOrMortgage,
+      String location,
+      double otherShelter,
+      bool disabledOrElderly) {
+    double grossIncome = unearnedIncome + earnedIncome;
+    double adjustedGrossIncome = grossIncome - childSupport;
+    double earnedIncomeDeduction = earnedIncome * .2;
+    double standardDeduction = getStandardDeduction(householdSize);
+    double dependentCareDeduction = dependentCare;
+    double homelessDeduction = getHomelessDeduction(homelessnessStatus);
+    double medicalDeduction = getAdjustsedMedicalDeduction(medicalExpenses);
+    double totalDeduction = earnedIncomeDeduction +
+        standardDeduction +
+        dependentCareDeduction +
+        homelessDeduction +
+        medicalDeduction;
+    double adjustedIncome = adjustedGrossIncome - totalDeduction;
+    if (adjustedIncome <= 0) adjustedIncome = 0;
+    double shelterExcess = getShelterExcessNewYork(
+        adjustedGrossIncome,
+        rentOrMortgage,
+        getStandardUtilityAllowanacesNewYorkArea(location),
+        otherShelter,
+        disabledOrElderly);
+    double netIncome = adjustedIncome - shelterExcess;
+    return getMaxBenefit(householdSize) - netIncome * .3;
   }
-
 }
 
 class MyApp extends StatelessWidget {
@@ -249,13 +269,22 @@ class Model {
   }
 
   updateMax() {
-    yourMax =
-        Calculator.getMaxBenefit(yourHouseholdSize);
+    yourMax = Calculator.getMaxBenefit(yourHouseholdSize);
   }
 
   updateNYBenefit() {
-    yourNYBenefit = 
-        Calculator.advancedDeductionCalculation(yourUnearnedIncome, yourEarnedIncome, yourChildSupport, yourHouseholdSize, yourDependentCareCosts, yourHomelessnessStatus, yourMedicalExpenses, yourRentOrMortgage, yourArea, yourOtherShelterCosts, disabledOrElderly);
+    yourNYBenefit = Calculator.advancedDeductionCalculation(
+        yourUnearnedIncome,
+        yourEarnedIncome,
+        yourChildSupport,
+        yourHouseholdSize,
+        yourDependentCareCosts,
+        yourHomelessnessStatus,
+        yourMedicalExpenses,
+        yourRentOrMortgage,
+        yourArea,
+        yourOtherShelterCosts,
+        disabledOrElderly);
   }
 //  double getYourMax() {
 //    return yourMax;
@@ -525,9 +554,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                               icon: Icon(Icons.person),
                               border: InputBorder.none,
                               hintText:
-                              'How many members live in your household? ',
-                              labelText:
-                              'Household size: '),
+                                  'How many members live in your household? ',
+                              labelText: 'Household size: '),
                           onChanged: (String householdSize) {
                             if (!(householdSize.contains('@') ||
                                 householdSize.contains(new RegExp(r'[A-Z]')) ||
@@ -542,10 +570,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                           },
                           validator: (String childSupport) {
                             return childSupport.contains('@') ||
-                                childSupport.contains('.') ||
-                                childSupport
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                childSupport.contains(new RegExp(r'[a-z]'))
+                                    childSupport.contains('.') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport.contains(new RegExp(r'[a-z]'))
                                 ? 'Only use numbers.'
                                 : null;
                           },
@@ -586,25 +614,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                               icon: Icon(Icons.attach_money),
                               border: InputBorder.none,
                               hintText:
-                              'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
+                                  'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
                               labelText: 'Unearned monthly income '),
                           onChanged: (String inputtedIncome) {
                             if (!(inputtedIncome
-                                .contains(new RegExp(r'[A-Z]')) ||
+                                    .contains(new RegExp(r'[A-Z]')) ||
                                 inputtedIncome
                                     .contains(new RegExp(r'[a-z]')))) {
                               setState(() {
                                 model.yourUnearnedIncome =
-                                (double.parse(inputtedIncome));
+                                    (double.parse(inputtedIncome));
                                 model.updateNYBenefit();
                               });
                             }
                           },
                           validator: (String inputtedIncome) {
                             return (inputtedIncome
-                                .contains(new RegExp(r'[A-Z]')) ||
-                                inputtedIncome
-                                    .contains(new RegExp(r'[a-z]')))
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')))
                                 ? 'Only use numbers.'
                                 : null;
                           },
@@ -749,19 +777,21 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                               icon: Icon(Icons.arrow_downward),
                               border: InputBorder.none,
                               hintText:
-                              'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
-                              labelText: 'Other shelter expenses (non-utility/rent) '),
+                                  'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
+                              labelText:
+                                  'Other shelter expenses (non-utility/rent) '),
                           onChanged: (String inputtedShelter) {
                             setState(() {
-                              model.yourOtherShelterCosts=
+                              model.yourOtherShelterCosts =
                                   double.parse(inputtedShelter);
                               model.updateBenefit();
                             });
                           },
                           validator: (String inputtedShelter) {
                             return (inputtedShelter
-                                .contains(new RegExp(r'[A-Z]')) ||
-                                inputtedShelter.contains(new RegExp(r'[a-z]')))
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedShelter
+                                        .contains(new RegExp(r'[a-z]')))
                                 ? 'Only use numbers.'
                                 : null;
                           },
@@ -797,8 +827,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       numOfPeople.contains(new RegExp(r'[A-Z]')) ||
                       numOfPeople.contains(new RegExp(r'[a-z]')))) {
                     setState(() {
-                      model.yourHouseholdSize =
-                          int.parse(numOfPeople);
+                      model.yourHouseholdSize = int.parse(numOfPeople);
                       model.updateMax();
                     });
                   }
