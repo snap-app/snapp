@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -817,10 +818,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 //
 
       Container(
-          padding: EdgeInsets.all(10.0),
-          child: Column(children: <Widget>[
-            Text('This is map stuff.'),
-          ])),
+        padding: EdgeInsets.all(10.0),
+        child: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl:
+              'https://usda-fns.maps.arcgis.com/apps/webappviewer/index.html?id=e1f3028b217344d78b324193b10375e4',
+        ),
+      ),
       Container(
           padding: EdgeInsets.all(10.0),
           child: Column(children: <Widget>[
