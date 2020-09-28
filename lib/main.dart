@@ -4,6 +4,56 @@ import 'package:webview_flutter/webview_flutter.dart';
 void main() => runApp(MyApp());
 
 class Calculator {
+  int yourHouseholdSize;
+  double yourMax;
+  double monthlyIncome;
+  double yourBenefit;
+  double yourDeduction;
+  double yourStandardDeduction;
+  bool yourHomelessnessStatus;
+  double yourChildSupport;
+  double yourDependentCareCosts;
+  int yourDependentAge;
+  double yourMedicalExpenses;
+  double yourUnearnedIncome;
+  double yourEarnedIncome;
+  double yourRentOrMortgage;
+  String yourArea;
+  double yourAdjustedIncome;
+  double yourStandardUtilityAllowance;
+  int yourStandardUtilityAllowanceLevel;
+  double yourOtherShelterCosts;
+  bool disabledOrElderly;
+  double yourShelterExcess;
+  double yourNetIncome;
+  double yourNYBenefit;
+
+  Calculator() {
+    yourHouseholdSize = 0;
+    yourMax = 0;
+    monthlyIncome = 0;
+    yourChildSupport = 0;
+    yourBenefit = 0;
+    yourDeduction = 0;
+    yourStandardDeduction = 0;
+    yourHomelessnessStatus = false;
+    yourDependentCareCosts = 0;
+    yourDependentAge = 18;
+    yourMedicalExpenses = 0;
+    yourUnearnedIncome = 0;
+    yourEarnedIncome = 0;
+    yourRentOrMortgage = 0;
+    yourArea = '';
+    yourAdjustedIncome = 0;
+    yourStandardUtilityAllowance = 0;
+    yourStandardUtilityAllowanceLevel = 3;
+    yourOtherShelterCosts = 0;
+    disabledOrElderly = false;
+    yourShelterExcess = 0;
+    yourNetIncome = 0;
+    yourNYBenefit = 0;
+  }
+
   static double getMaxBenefit(int householdSize) {
     if (householdSize >= 8) {
       return (1164 + (householdSize - 8.0) * 146);
@@ -19,8 +69,10 @@ class Calculator {
       return 509;
     } else if (householdSize == 2) {
       return 355;
-    }
-    return 194;
+    } else if (householdSize == 1) {
+      return 194;
+    } else
+      return 0;
   }
 
   static double threeInputCalc(
@@ -55,45 +107,44 @@ class Calculator {
     }
   }
 
-  static double getAdjustsedMedicalDeduction(double medicalExpenses) {
+  static double getAdjustedMedicalDeduction(double medicalExpenses) {
     if (medicalExpenses > 35.0)
       return medicalExpenses;
     else
       return 0;
   }
 
-  static double getStandardUtilityAllowanacesNewYork(
-      String area, String level) {
+  static double getStandardUtilityAllowanacesNewYork(String area, int level) {
     if (area == 'newYorkCity') {
-      if (level == 'heatingAndCooling') {
+      if (level == 1) {
         return 800;
       }
-      if (level == 'utilities') {
+      if (level == 2) {
         return 316;
       }
-      if (level == 'telephone') {
+      if (level == 3) {
         return 30;
       }
     }
     if (area == 'nassauAndSuffolk') {
-      if (level == 'heatingAndCooling') {
+      if (level == 1) {
         return 744;
       }
-      if (level == 'utilities') {
+      if (level == 2) {
         return 292;
       }
-      if (level == 'telephone') {
+      if (level == 3) {
         return 30;
       }
     }
     if (area == 'restOfState') {
-      if (level == 'heatingAndCooling') {
+      if (level == 1) {
         return 661;
       }
-      if (level == 'utilities') {
+      if (level == 2) {
         return 268;
       }
-      if (level == 'telephone') {
+      if (level == 3) {
         return 30;
       }
     }
@@ -125,7 +176,7 @@ class Calculator {
         getStandardDeduction(householdSize) +
         dependentCare +
         getHomelessDeduction(homelessness) +
-        getAdjustsedMedicalDeduction(medicalExpenses);
+        getAdjustedMedicalDeduction(medicalExpenses);
   }
 
   static double getMonthlyGrossIncomeTestNY(
@@ -146,15 +197,15 @@ class Calculator {
       bool disabledOrElderly) {
     double totalShelterExpenses =
         rentOrMortgage + standardUtilityAllowance + otherShelterExpenses;
-    if (adjustedIncome / 2 - totalShelterExpenses > 569 && disabledOrElderly)
-      return adjustedIncome / 2 - totalShelterExpenses;
-    else if (adjustedIncome / 2 - totalShelterExpenses > 569 &&
+    if (totalShelterExpenses - adjustedIncome / 2 > 569 && disabledOrElderly)
+      return totalShelterExpenses - adjustedIncome / 2;
+    else if (totalShelterExpenses - adjustedIncome / 2 > 569 &&
         !disabledOrElderly)
       return 569;
-    else if (adjustedIncome / 2 - totalShelterExpenses <= 0)
+    else if ((totalShelterExpenses - adjustedIncome / 2) <= 0)
       return 0;
     else
-      return adjustedIncome / 2 - totalShelterExpenses;
+      return totalShelterExpenses - adjustedIncome / 2;
   }
 
   static double newYorkCalculation(double maxBenefit, double grossIncome,
@@ -163,16 +214,18 @@ class Calculator {
         maxBenefit, grossIncome, totalDeductions + shelterExcess);
   }
 
-  static double advancedDeductionCalculation(
+  static List<double> advancedDeductionCalculation(
       double unearnedIncome,
       double earnedIncome,
       double childSupport,
       int householdSize,
       double dependentCare,
+      int dependentAge,
       bool homelessnessStatus,
       double medicalExpenses,
       double rentOrMortgage,
       String location,
+      int utilityAllowanceLevel,
       double otherShelter,
       bool disabledOrElderly) {
     double grossIncome = unearnedIncome + earnedIncome;
@@ -180,8 +233,12 @@ class Calculator {
     double earnedIncomeDeduction = earnedIncome * .2;
     double standardDeduction = getStandardDeduction(householdSize);
     double dependentCareDeduction = dependentCare;
+    if (dependentAge < 2 && dependentCareDeduction > 200)
+      dependentCareDeduction = 200;
+    if (dependentAge >= 2 && dependentCareDeduction > 175)
+      dependentCareDeduction = 175;
     double homelessDeduction = getHomelessDeduction(homelessnessStatus);
-    double medicalDeduction = getAdjustsedMedicalDeduction(medicalExpenses);
+    double medicalDeduction = getAdjustedMedicalDeduction(medicalExpenses);
     double totalDeduction = earnedIncomeDeduction +
         standardDeduction +
         dependentCareDeduction +
@@ -190,13 +247,42 @@ class Calculator {
     double adjustedIncome = adjustedGrossIncome - totalDeduction;
     if (adjustedIncome <= 0) adjustedIncome = 0;
     double shelterExcess = getShelterExcessNewYork(
-        adjustedGrossIncome,
+        adjustedIncome,
         rentOrMortgage,
-        getStandardUtilityAllowanacesNewYorkArea(location),
+        getStandardUtilityAllowanacesNewYork(location, utilityAllowanceLevel),
         otherShelter,
         disabledOrElderly);
     double netIncome = adjustedIncome - shelterExcess;
-    return getMaxBenefit(householdSize) - netIncome * .3;
+    double standardUtilityAllowance =
+        getStandardUtilityAllowanacesNewYork(location, utilityAllowanceLevel);
+    double absoluteBenefit = getMaxBenefit(householdSize) - netIncome * .3;
+    if (absoluteBenefit <= 0) {
+      return [
+        0,
+        adjustedIncome,
+        standardDeduction,
+        netIncome,
+        shelterExcess,
+        standardUtilityAllowance
+      ];
+    } else if (absoluteBenefit >= getMaxBenefit(householdSize)) {
+      return [
+        getMaxBenefit(householdSize),
+        adjustedIncome,
+        standardDeduction,
+        netIncome,
+        shelterExcess,
+        standardUtilityAllowance
+      ];
+    } else
+      return [
+        absoluteBenefit,
+        adjustedIncome,
+        standardDeduction,
+        netIncome,
+        shelterExcess,
+        standardUtilityAllowance
+      ];
   }
 }
 
@@ -221,6 +307,7 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class Model {
+  Calculator calculator;
   int yourHouseholdSize;
   double yourMax;
   double monthlyIncome;
@@ -230,12 +317,15 @@ class Model {
   bool yourHomelessnessStatus;
   double yourChildSupport;
   double yourDependentCareCosts;
+  int yourDependentAge;
   double yourMedicalExpenses;
   double yourUnearnedIncome;
   double yourEarnedIncome;
   double yourRentOrMortgage;
   String yourArea;
+  double yourAdjustedIncome;
   double yourStandardUtilityAllowance;
+  int yourStandardUtilityAllowanceLevel;
   double yourOtherShelterCosts;
   bool disabledOrElderly;
   double yourShelterExcess;
@@ -243,6 +333,7 @@ class Model {
   double yourNYBenefit;
 
   Model() {
+    this.calculator = calculator;
     yourHouseholdSize = 0;
     yourMax = 0;
     monthlyIncome = 0;
@@ -252,12 +343,15 @@ class Model {
     yourStandardDeduction = 0;
     yourHomelessnessStatus = false;
     yourDependentCareCosts = 0;
+    yourDependentAge = 18;
     yourMedicalExpenses = 0;
     yourUnearnedIncome = 0;
     yourEarnedIncome = 0;
     yourRentOrMortgage = 0;
     yourArea = '';
+    yourAdjustedIncome = 0;
     yourStandardUtilityAllowance = 0;
+    yourStandardUtilityAllowanceLevel = 3;
     yourOtherShelterCosts = 0;
     disabledOrElderly = false;
     yourShelterExcess = 0;
@@ -274,19 +368,34 @@ class Model {
   }
 
   updateNYBenefit() {
-    yourNYBenefit = Calculator.advancedDeductionCalculation(
+    List<double> yourNYData = Calculator.advancedDeductionCalculation(
         yourUnearnedIncome,
         yourEarnedIncome,
         yourChildSupport,
         yourHouseholdSize,
         yourDependentCareCosts,
+        yourDependentAge,
         yourHomelessnessStatus,
         yourMedicalExpenses,
         yourRentOrMortgage,
         yourArea,
+        yourStandardUtilityAllowanceLevel,
         yourOtherShelterCosts,
         disabledOrElderly);
+    yourNYBenefit = yourNYData[0];
+    yourAdjustedIncome = yourNYData[1];
+    yourStandardDeduction = yourNYData[2];
+    yourNetIncome = yourNYData[3];
+    yourShelterExcess = yourNYData[4];
+    yourStandardUtilityAllowance = yourNYData[5];
+/*    yourAdjustedIncome = calculator.yourAdjustedIncome;
+    yourStandardDeduction = calculator.yourStandardDeduction;
+    yourNetIncome = calculator.yourNetIncome;
+    yourShelterExcess = calculator.yourShelterExcess;
+    yourStandardUtilityAllowance = calculator.yourStandardUtilityAllowance;
+    [absoluteBenefit, adjustedIncome, standardDeduction, netIncome, shelterExcess, standardUtilityAllowance];*/
   }
+
 //  double getYourMax() {
 //    return yourMax;
 //  }
@@ -424,6 +533,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     "Rest of State"
   ];
 
+  List<String> choices2 = [
+    "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)",
+    "I have utility costs.",
+    "I have neither."
+  ];
+
+  List<String> choices3 = [
+    "My dependent is over 2 years of age.",
+    "My dependent is under 2 years of age."
+  ];
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 18, fontWeight: FontWeight.normal);
 
@@ -433,294 +553,885 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
+  Widget _buildAboutDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Simplified Calculation:'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+              "First, your maximum possible benefit is calculated based on your household size.\n"),
+          Text(
+              "Then, you are expected to pay 30% of your adjusted income (after deductions provided for necessary expenses and other conditions). That value is subtracted from your household maximum.\n"),
+          Text(
+              "Equation: Household Maximum - (income - deductions) x .3 \n\nFor the calculation citations and more, look in the resource tab.")
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAboutAdvanced(BuildContext context) {
+    model.updateNYBenefit();
+    return new AlertDialog(
+      title: const Text('NY Full Calculation:'),
+      content: new SingleChildScrollView(
+        child: //StatefulBuilder(builder: (context, setState) {
+            Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Text("Your maximum is: " + model.yourMax.toString()),
+            new Text(
+                "Your estimated benefit is: " + model.yourNYBenefit.toString()),
+            Text("\n \nFirst, your maximum possible benefit (\$" +
+                model.yourMax.toString() +
+                ") is calculated based on your household size.\n"),
+            Text(
+                "Then, you are expected to pay 30% of your adjusted income (after deductions provided for necessary expenses and other conditions). That value is subtracted from your household maximum.\n"),
+            Text(
+                "The deduction is calculated from a variety of factors, in this process:\n"),
+            Text("1. Child support expenses (\$" +
+                model.yourChildSupport.toString() +
+                ") are deducted from your gross income."),
+            Text("2. 20% of earned income (\$" +
+                (model.yourEarnedIncome * .2).toString() +
+                ") is further deducted."),
+            Text("3. A standard deduction based on your household size (\$" +
+                model.yourStandardDeduction.toString() +
+                ") is again deducted."),
+            Text("4. All dependent care costs (\$" +
+                model.yourDependentCareCosts.toString() +
+                "), or expenses for children under 18 years or disabled household members of any age, are deducted. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age."),
+            Text("5. If you are homeless, a deduction of \$152.06 is applied."),
+            Text(
+                "6. Your medical expenses over \$35 a month for household members over 60 or disabled household members (\$" +
+                    model.yourMedicalExpenses.toString() +
+                    ") are deducted."),
+            Text("7. The deductions up to this point deducted from your gross income constitute your adjusted income (\$" +
+                model.yourAdjustedIncome.toString() +
+                "). A shelter excess deduction may be applied. Its size and eligibility are determined as follows:"), //TODO: Shelter excess may be calculated incorrectly. Everything else seems to work backend wise. The maximum benefit indicator does not work right now. Perhaps do away with it entirely and use the show calculation and benefit button (I think this is a very good option).
+            Text("7a. Add up your rent/mortgage costs (\$" +
+                model.yourRentOrMortgage.toString() +
+                "), your standard utility  allowance (\$" +
+                model.yourStandardUtilityAllowance.toString() +
+                "), determined by your location within NY, and your other shelter expenses (\$" +
+                model.yourOtherShelterCosts.toString() +
+                ")"), //TODO: Add the resource section and test some other margin cases. Add the disclaimer. Add some updates section ( you should talk to haoye about this one). Finally, maybe add some other states.
+            Text("7b. Take your total shelter expenses (\$" +
+                (model.yourOtherShelterCosts +
+                        model.yourRentOrMortgage +
+                        model.yourStandardUtilityAllowance)
+                    .toString() +
+                ") and then subtract half your adjusted income."),
+            Text(
+                "7c. If this amount is greater to or equal than \$569, your shelter excess deduction is \$569. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$569. If the amount is negative, your deduction for this section is \$0."),
+            Text("8. Subtract the shelter excess calculated in step 7 (\$" +
+                model.yourShelterExcess.toString() +
+                ") from your adjusted income calculated."),
+            Text("9. That leaves you with your net income (\$" +
+                model.yourNetIncome.toString() +
+                "). You are expected to put 30% of this figure towards food, which is subtracted from your maximum possible benefit of \$" +
+                model.yourMax.toString() +
+                ". That leaves a final estimated monthly benefit of \$" +
+                model.yourNYBenefit.toString() +
+                "."),
+            Text(
+                "\nFor the calculation and deductions citations, and more, look in the resource tab.")
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   showPopup(BuildContext context, {BuildContext popupContext}) {
     Navigator.push(
         context,
         PopupLayout(
-          top: 30,
-          left: 30,
-          right: 30,
-          bottom: 50,
-          child: PopupContent(
-            //this is all the stuff going in the advanced ny deduction section in the popup. right now i've just copy pasted the same questions and stuff, i will change that later to reflect the actual deduction related thigns
-            content: Scaffold(
-              appBar: AppBar(
-                title: Text('Deduction Guide (NY Specific)'),
-                leading: new Builder(builder: (context) {
-                  return IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      try {
-                        Navigator.pop(context); //close the popup
-                      } catch (e) {}
-                    },
-                  );
-                }),
-                brightness: Brightness.light,
-              ),
-              resizeToAvoidBottomPadding: false,
-              body: Container(
-                padding: EdgeInsets.all(10.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.person),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How many members live in your household? ',
-                              labelText: 'Household size: '),
-                          onChanged: (String householdSize) {
-                            if (!(householdSize.contains('@') ||
-                                householdSize.contains(new RegExp(r'[A-Z]')) ||
-                                householdSize.contains(new RegExp(r'[a-z]')))) {
-                              setState(() {
-                                model.yourHouseholdSize =
-                                    int.parse(householdSize);
-                                model.updateMax();
-                                model.updateNYBenefit();
-                              });
-                            }
-                          },
-                          validator: (String childSupport) {
-                            return childSupport.contains('@') ||
-                                    childSupport.contains('.') ||
-                                    childSupport
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    childSupport.contains(new RegExp(r'[a-z]'))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.person),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much child support do you pay monthly? ',
-                              labelText:
-                                  'Monthly child support payment (optional) '),
-                          onChanged: (String childSupport) {
-                            if (!(childSupport.contains('@') ||
-                                childSupport.contains(new RegExp(r'[A-Z]')) ||
-                                childSupport.contains(new RegExp(r'[a-z]')))) {
-                              setState(() {
-                                model.yourChildSupport =
-                                    double.parse(childSupport);
-                                model.updateNYBenefit();
-                              });
-                            }
-                          },
-                          validator: (String childSupport) {
-                            return childSupport.contains('@') ||
-                                    childSupport.contains('.') ||
-                                    childSupport
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    childSupport.contains(new RegExp(r'[a-z]'))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        new TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.attach_money),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
-                              labelText: 'Unearned monthly income '),
-                          onChanged: (String inputtedIncome) {
-                            if (!(inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                inputtedIncome
-                                    .contains(new RegExp(r'[a-z]')))) {
-                              setState(() {
-                                model.yourUnearnedIncome =
-                                    (double.parse(inputtedIncome));
-                                model.updateNYBenefit();
-                              });
-                            }
-                          },
-                          validator: (String inputtedIncome) {
-                            return (inputtedIncome
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedIncome
-                                        .contains(new RegExp(r'[a-z]')))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        new TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.attach_money),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much of your monthly income is earned? (income from work, not gained passively from savings, rent, or benefits)',
-                              labelText: 'Earned monthly income '),
-                          onChanged: (String inputtedIncome) {
-                            if (!(inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                inputtedIncome
-                                    .contains(new RegExp(r'[a-z]')))) {
-                              setState(() {
-                                model.yourEarnedIncome =
-                                    (double.parse(inputtedIncome));
-                                model.updateNYBenefit();
-                              });
-                            }
-                          },
-                          validator: (String inputtedIncome) {
-                            return (inputtedIncome
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedIncome
-                                        .contains(new RegExp(r'[a-z]')))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        new TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.arrow_downward),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much do you pay in dependent care costs monthly? (care for children under 18 or disabled household members of any age) ',
-                              labelText: 'Dependent care costs '),
-                          onChanged: (String inputtedCare) {
-                            setState(() {
-                              model.yourDependentCareCosts =
-                                  double.parse(inputtedCare);
-                              model.updateNYBenefit();
-                            });
-                          },
-                          validator: (String inputtedCare) {
-                            return (inputtedCare
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedCare.contains(new RegExp(r'[a-z]')))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+            top: 30,
+            left: 30,
+            right: 30,
+            bottom: 50,
+            child: StatefulBuilder(builder: (context, setState) {
+              //this is all the stuff going in the advanced ny deduction section in the popup. Maybe add an option to look at more states soon
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('NY Advanced Deduction Guide'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: false,
+                  body: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Text("Check if you are homeless"),
-                            Checkbox(
-                              value: model.yourHomelessnessStatus,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  model.yourHomelessnessStatus = value;
-                                  model.updateNYBenefit();
-                                });
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.person),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How many people live in your household? ',
+                                  labelText: 'Household size: '),
+                              onChanged: (String householdSize) {
+                                if (!(householdSize.contains('@') ||
+                                    householdSize
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    householdSize
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (householdSize == null &&
+                                        int.tryParse(householdSize) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourHouseholdSize =
+                                        int.parse(householdSize);
+                                    model.updateMax();
+                                    model.updateNYBenefit();
+                                  });
+                                }
                               },
+                              onSaved: (String householdSize) {
+                                if (!(householdSize.contains('@') ||
+                                    householdSize
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    householdSize
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (householdSize == null &&
+                                        int.tryParse(householdSize) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourHouseholdSize =
+                                        int.parse(householdSize);
+                                    model.updateMax();
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String householdSizeValidator) {
+                                if (householdSizeValidator.contains('@') ||
+                                    householdSizeValidator.contains('.') ||
+                                    householdSizeValidator
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    householdSizeValidator
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (householdSizeValidator == null &&
+                                        int.tryParse(
+                                                householdSizeValidator) ==
+                                            null)) {
+                                  model.yourHouseholdSize = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return householdSizeValidator.contains('@') ||
+                                        householdSizeValidator.contains('.') ||
+                                        householdSizeValidator
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        householdSizeValidator
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (householdSizeValidator == null &&
+                                            int.tryParse(
+                                                    householdSizeValidator) ==
+                                                null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
                             ),
-                          ],
-                        ),
-                        new TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.arrow_downward),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much do you pay in medical expenses monthly? ',
-                              labelText: 'Medical expenses '),
-                          onChanged: (String inputtedMedical) {
-                            setState(() {
-                              model.yourMedicalExpenses =
-                                  double.parse(inputtedMedical);
-                              model.updateNYBenefit();
-                            });
-                          },
-                          validator: (String inputtedMedical) {
-                            return (inputtedMedical
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.child_care),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much child support do you pay monthly? ',
+                                  labelText:
+                                      'Monthly child support payment (optional) '),
+                              onChanged: (String childSupport) {
+                                if (!(childSupport.contains('@') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (childSupport == null &&
+                                        double.tryParse(childSupport) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourChildSupport =
+                                        double.parse(childSupport);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String childSupport) {
+                                if (!(childSupport.contains('@') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (childSupport == null &&
+                                        double.tryParse(childSupport) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourChildSupport =
+                                        double.parse(childSupport);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String childSupport) {
+                                if (childSupport.contains('@') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (childSupport == null &&
+                                        double.tryParse(childSupport) ==
+                                            null)) {
+                                  model.yourChildSupport = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return childSupport.contains('@') ||
+                                        childSupport
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        childSupport
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (childSupport == null &&
+                                            double.tryParse(childSupport) ==
+                                                null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.attach_money),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
+                                  labelText: 'Unearned monthly income '),
+                              onChanged: (String inputtedIncome) {
+                                if (!(inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourUnearnedIncome =
+                                        (double.parse(inputtedIncome));
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedIncome) {
+                                if (inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null)) {
+                                  model.yourUnearnedIncome = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return (inputtedIncome
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedIncome
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedIncome == null &&
+                                            double.tryParse(inputtedIncome) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.attach_money),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much of your monthly income is earned? (income from work, not gained passively from savings, rent, or benefits)',
+                                  labelText: 'Earned monthly income '),
+                              onChanged: (String inputtedIncome) {
+                                if (!(inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourEarnedIncome =
+                                        (double.parse(inputtedIncome));
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String inputtedIncome) {
+                                if (!(inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourEarnedIncome =
+                                        (double.parse(inputtedIncome));
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedIncome) {
+                                if (inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null)) {
+                                  model.yourEarnedIncome = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return (inputtedIncome
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedIncome
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedIncome == null &&
+                                            double.tryParse(inputtedIncome) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.child_friendly),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'Dependent care (for children under 18 or disabled household members of any age ',
+                                  labelText: 'Dependent care costs (for children under 18 or disabled household members of any age)'),
+                              onChanged: (String inputtedCare) {
+                                if (!(inputtedCare
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedCare
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedCare == null &&
+                                        double.tryParse(inputtedCare) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourDependentCareCosts =
+                                        double.parse(inputtedCare);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String inputtedCare) {
+                                if (!(inputtedCare
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedCare
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedCare == null &&
+                                        double.tryParse(inputtedCare) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourDependentCareCosts =
+                                        double.parse(inputtedCare);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedCare) {
+                                if (inputtedCare
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedCare
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedCare == null &&
+                                        double.tryParse(inputtedCare) ==
+                                            null)) {
+                                  model.yourDependentCareCosts = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return (inputtedCare
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedCare
+                                            .contains(new RegExp(r'[a-z]')))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.cake),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How old is the dependent you care for? (expenses from last question ',
+                                  labelText: 'Dependent Age: '),
+                              onChanged: (String dependentAge) {
+                                if (!(dependentAge.contains('@') ||
+                                        dependentAge
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        dependentAge
+                                            .contains(new RegExp(r'[a-z]'))) ||
+                                    (dependentAge == null &&
+                                        int.tryParse(dependentAge) == null)) {
+                                  setState(() {
+                                    model.yourDependentAge =
+                                        int.parse(dependentAge);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String dependentAge) {
+                                if (!(dependentAge.contains('@') ||
+                                    dependentAge
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    dependentAge
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (dependentAge == null &&
+                                        int.tryParse(dependentAge) == null))) {
+                                  setState(() {
+                                    model.yourDependentAge =
+                                        int.parse(dependentAge);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String dependentAgeValidator) {
+                                if (dependentAgeValidator.contains('@') ||
+                                    dependentAgeValidator.contains('.') ||
+                                    dependentAgeValidator
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    dependentAgeValidator
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (dependentAgeValidator == null &&
+                                        int.tryParse(dependentAgeValidator) ==
+                                            null)) {
+                                  model.yourDependentAge = 18;
+                                  model.updateNYBenefit();
+                                }
+                                return dependentAgeValidator.contains('@') ||
+                                        dependentAgeValidator.contains('.') ||
+                                        dependentAgeValidator
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        dependentAgeValidator
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (dependentAgeValidator == null &&
+                                            int.tryParse(
+                                                    dependentAgeValidator) ==
+                                                null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("Check if you are homeless"),
+                                Checkbox(
+                                  value: model.yourHomelessnessStatus,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      model.yourHomelessnessStatus = value;
+                                      model.updateNYBenefit();
+                                    });
+                                  },
+                                ),
+                                Text(
+                                    "Check if you are disabled or elderly or if you have disabled or elderly household members"),
+                                Checkbox(
+                                  value: model.disabledOrElderly,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      model.disabledOrElderly = value;
+                                      model.updateNYBenefit();
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.local_hospital),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much do you pay per month for medical expenses for elderly or disabled household members? (costs not reimbursed by Title XVIII (Medicare) or XIX (Medicaid))',
+                                  labelText: 'Medical expenses '),
+                              onChanged: (String inputtedMedical) {
+                                if (!(inputtedMedical
                                         .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedMedical
-                                        .contains(new RegExp(r'[a-z]')))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        new TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.arrow_downward),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much do you pay for rent/mortgage each month? ',
-                              labelText: 'Rent/mortgage '),
-                          onChanged: (String inputtedRent) {
-                            setState(() {
-                              model.yourRentOrMortgage =
-                                  double.parse(inputtedRent);
-                              model.updateNYBenefit();
-                            });
-                          },
-                          validator: (String inputtedRent) {
-                            return (inputtedRent
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedRent.contains(new RegExp(r'[a-z]')))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        Text(
-                            'Where in the state do you live? (used to determine standard utility allowances'),
-                        Column(
-                          children: choices.map((item) {
-                            //change index of choices array as you need
-                            return RadioListTile(
-                              groupValue: model.yourArea,
-                              title: Text(item),
-                              value: item,
-                              activeColor: Colors.blue,
-                              onChanged: (val) {
-                                print(val);
-                                setState(() {
-                                  model.yourArea = val;
-                                  model.updateNYBenefit();
-                                });
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedMedical == null &&
+                                        double.tryParse(inputtedMedical) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourMedicalExpenses =
+                                        double.parse(inputtedMedical);
+                                    model.updateNYBenefit();
+                                  });
+                                }
                               },
-                            );
-                          }).toList(),
-                        ),
-                        new TextFormField(
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.arrow_downward),
-                              border: InputBorder.none,
-                              hintText:
-                                  'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
-                              labelText:
-                                  'Other shelter expenses (non-utility/rent) '),
-                          onChanged: (String inputtedShelter) {
-                            setState(() {
-                              model.yourOtherShelterCosts =
-                                  double.parse(inputtedShelter);
-                              model.updateBenefit();
-                            });
-                          },
-                          validator: (String inputtedShelter) {
-                            return (inputtedShelter
+                              onSaved: (String inputtedMedical) {
+                                if (!(inputtedMedical
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedMedical
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedMedical == null &&
+                                        double.tryParse(inputtedMedical) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourMedicalExpenses =
+                                        double.parse(inputtedMedical);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedMedical) {
+                                if (inputtedMedical
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedMedical
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedMedical == null &&
+                                        double.tryParse(inputtedMedical) ==
+                                            null)) {
+                                  model.yourMedicalExpenses = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return (inputtedMedical
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedMedical
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        inputtedMedical == null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.home),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much do you pay for rent/mortgage each month? ',
+                                  labelText: 'Rent/mortgage '),
+                              onSaved: (String inputtedRent) {
+                                if (!(inputtedRent
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedRent
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedRent == null &&
+                                        double.tryParse(inputtedRent) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourRentOrMortgage =
+                                        double.parse(inputtedRent);
+                                    model.updateBenefit();
+                                  });
+                                }
+                              },
+                              onChanged: (String inputtedRent) {
+                                if (!(inputtedRent
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedRent
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedRent == null &&
+                                        double.tryParse(inputtedRent) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourRentOrMortgage =
+                                        double.parse(inputtedRent);
+                                    model.updateNYBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedRent) {
+                                if (inputtedRent
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedRent
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedRent == null &&
+                                        double.tryParse(inputtedRent) ==
+                                            null)) {
+                                  model.yourRentOrMortgage = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return (inputtedRent
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedRent
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedRent == null &&
+                                            double.tryParse(inputtedRent) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            Text(
+                                '\nWhere in the state do you live? (used to determine standard utility allowances\n'),
+                            Column(
+                              children: choices.map((item) {
+                                //change index of choices array as you need
+                                return RadioListTile(
+                                  groupValue: model.yourArea,
+                                  title: Text(item),
+                                  value: item,
+                                  activeColor: Colors.blue,
+                                  onChanged: (val) {
+                                    print(val);
+                                    setState(() {
+                                      model.yourArea = val;
+                                      model.updateNYBenefit();
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            Text(
+                                '\nDo you have heating or cooling costs, or utility costs? (used to determine standard utility allowances\n'),
+                            Column(
+                              children: choices2.map((item) {
+                                //change index of choices array as you need
+                                return RadioListTile(
+                                  groupValue:
+                                      model.yourStandardUtilityAllowanceLevel,
+                                  title: Text(item),
+                                  value: item,
+                                  activeColor: Colors.blue,
+                                  onChanged: (val) {
+                                    print(val);
+                                    setState(() {
+                                      if (val ==
+                                          "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)")
+                                        model.yourStandardUtilityAllowanceLevel =
+                                            1;
+                                      else if (val == "I have utility costs.")
+                                        model.yourStandardUtilityAllowanceLevel =
+                                            2;
+                                      else if (val == "I have neither.")
+                                        model.yourStandardUtilityAllowanceLevel =
+                                            3;
+                                      else
+                                        model.yourStandardUtilityAllowanceLevel =
+                                            3;
+                                      model.updateNYBenefit();
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.add),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
+                                  labelText:
+                                      'Other shelter expenses (non-utility/rent) '),
+                              onSaved: (String inputtedShelter) {
+                                if (!(inputtedShelter
                                         .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedShelter
-                                        .contains(new RegExp(r'[a-z]')))
-                                ? 'Only use numbers.'
-                                : null;
-                          },
-                          autovalidate: true,
-                        ),
-                        new Text(model.yourMax.toString()),
-                        new Text(model.yourNYBenefit.toString()),
-                      ]),
-                ),
-              ),
-            ),
-          ),
-        ));
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedShelter == null &&
+                                        double.tryParse(inputtedShelter) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourOtherShelterCosts =
+                                        double.parse(inputtedShelter);
+                                    model.updateBenefit();
+                                  });
+                                }
+                              },
+                              onChanged: (String inputtedShelter) {
+                                if (!(inputtedShelter
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedShelter
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedShelter == null &&
+                                        double.tryParse(inputtedShelter) ==
+                                            null))) {
+                                  setState(() {
+                                    model.yourOtherShelterCosts =
+                                        double.parse(inputtedShelter);
+                                    model.updateBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedShelter) {
+                                if (inputtedShelter
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedShelter
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedShelter == null &&
+                                        double.tryParse(inputtedShelter) ==
+                                            null)) {
+                                  model.yourOtherShelterCosts = 0;
+                                  model.updateNYBenefit();
+                                }
+                                return (inputtedShelter
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedShelter
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedShelter == null &&
+                                            double.tryParse(inputtedShelter) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidate: true,
+                            ),
+                            new RaisedButton(
+                              child: const Text('Update Benefit'),
+                              color: Theme.of(context).accentColor,
+                              elevation: 4.0,
+                              splashColor: Colors.amberAccent,
+                              textColor: const Color(0xFFFFFFFF),
+                              onPressed: () {
+                                model.updateNYBenefit();
+                                // Perform some action
+                              },
+                            ),
+                            new RaisedButton(
+                              child:
+                                  const Text('Show Benefit and Calculations'),
+                              color: Theme.of(context).accentColor,
+                              elevation: 4.0,
+                              splashColor: Colors.amberAccent,
+                              textColor: const Color(0xFFFFFFFF),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      _buildAboutAdvanced(context),
+                                );
+                                // Perform some action
+                              },
+                            ),
+                          ]),
+                    ),
+                  ));
+            })));
+    setState(() {});
+  }
+
+  showDisclaimer(BuildContext context, {BuildContext popupContext}) {
+    Navigator.push(
+        context,
+        PopupLayout(
+            top: 30,
+            left: 30,
+            right: 30,
+            bottom: 50,
+            child: StatefulBuilder(builder: (context, setState) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Calculator Disclaimer'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: true,
+                  body: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                            new Text(
+                                "The SNAPP Benefits Calculator should be used for screening purposes only. \n\nThe laws, regulations, rules and policies the calculator is based on are subject to change. \n\nWe make no representations or warranties, express or implied, as to the accuracy of the projected results. \n\nWe are not liable for any decision made or action taken by anyone in reliance upon the information obtained from this calculator. \n\nThe calculator is not endorsed by the public entities that administer the SNAP program and individuals who want to apply for SNAP benefits should submit an application to the government agency where official determinations are made. \n\nIf you are unsure about eligibility, don't hesitate to receive an official determination. There are many deductions and ways to calculate them, and you may be eligible for other benefits."),
+                            new Text(
+                                "There are also other disqualifying factors like immigration status, the gross monthly income test, SNAP limits for unemployed, childless adults, and asset thresholds that aren't otherwise used to calculate your benefit, so those factors are also not taken into account by this calculator. Only a caseworker can decide eligibility and give you the exact benefit amount.")
+                          ]))));
+            })));
+    setState(() {});
+  }
+
+  showInfo(BuildContext context, {BuildContext popupContext}) {
+    Navigator.push(
+        context,
+        PopupLayout(
+            top: 30,
+            left: 30,
+            right: 30,
+            bottom: 50,
+            child: StatefulBuilder(builder: (context, setState) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Navigation Guide'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: true,
+                  body: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                            Text(
+                                "Hi, this is our SNAPP Calculator and Info app. There are some tools in this app that can help you estimate your monthly benefits, look for stores with SNAP eligibility and food availability, get official determinations and more."),
+                            Text(
+                                "\nFirst is the SNAP Benefits Calculator on this page. The calculator you see behind this popup is a simplified calculator that takes three inputs-- your number of dependents, or household members, your household's monthly income, and your total number of deductions."),
+                            Text(
+                                "\nAll information you input in this calculator is private. All calculations are done locally, and nothing is stored in any other place. Rest assured that your information is 100% safe and not used for anything else but determining your potential benefit."),
+                            Text(
+                                "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other policies"),
+                            Text(
+                                "\n\nSome other resources included in this app are the ")
+                          ]))));
+            })));
+    setState(() {});
   }
 
   @override
@@ -752,7 +1463,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   return numOfPeople.contains('@') ||
                           numOfPeople.contains('.') ||
                           numOfPeople.contains(new RegExp(r'[A-Z]')) ||
-                          numOfPeople.contains(new RegExp(r'[a-z]'))
+                          numOfPeople.contains(new RegExp(r'[a-z]')) ||
+                          (numOfPeople == null &&
+                              double.tryParse(numOfPeople) == null)
                       ? 'Only use whole numbers.'
                       : null;
                 },
@@ -766,7 +1479,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     labelText: 'Monthly income '),
                 onChanged: (String inputtedIncome) {
                   if (!(inputtedIncome.contains(new RegExp(r'[A-Z]')) ||
-                      inputtedIncome.contains(new RegExp(r'[a-z]')))) {
+                      inputtedIncome.contains(new RegExp(r'[a-z]')) ||
+                      (inputtedIncome == null) &&
+                          double.tryParse(inputtedIncome) == null)) {
                     setState(() {
                       model.monthlyIncome = (double.parse(inputtedIncome));
                       model.updateBenefit();
@@ -775,7 +1490,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 },
                 validator: (String inputtedIncome) {
                   return (inputtedIncome.contains(new RegExp(r'[A-Z]')) ||
-                          inputtedIncome.contains(new RegExp(r'[a-z]')))
+                          inputtedIncome.contains(new RegExp(r'[a-z]')) ||
+                          (inputtedIncome == null &&
+                              double.tryParse(inputtedIncome) == null))
                       ? 'Only use numbers.'
                       : null;
                 },
@@ -786,8 +1503,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     icon: Icon(Icons.arrow_downward),
                     border: InputBorder.none,
                     hintText:
-                        'What is your total deduction? Use the advanced tool if you\'re not sure. ',
-                    labelText: 'Total deduction (tool in advanced) '),
+                        'What is your estimated total deductions? Use the advanced tool if you\'re not sure. ',
+                    labelText:
+                        'Estimated total deduction (if you\'re not sure, and live in NY, click the + button '),
                 onChanged: (String inputtedDeduction) {
                   setState(() {
                     model.yourDeduction = double.parse(inputtedDeduction);
@@ -796,14 +1514,41 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 },
                 validator: (String inputtedDeduction) {
                   return (inputtedDeduction.contains(new RegExp(r'[A-Z]')) ||
-                          inputtedDeduction.contains(new RegExp(r'[a-z]')))
+                          inputtedDeduction.contains(new RegExp(r'[a-z]')) ||
+                          (inputtedDeduction == null &&
+                              double.tryParse(inputtedDeduction) == null))
                       ? 'Only use numbers.'
                       : null;
                 },
                 autovalidate: true,
               ),
-              new Text(model.yourMax.toString()),
-              new Text(model.yourBenefit.toString()),
+              new Text("Your max benefit: " + model.yourMax.toString()),
+              new Text(
+                  "Your estimated benefit: " + model.yourBenefit.toString()),
+              new RaisedButton(
+                child: const Text('Show Calculation Steps'),
+                color: Theme.of(context).accentColor,
+                elevation: 4.0,
+                splashColor: Colors.amberAccent,
+                textColor: const Color(0xFFFFFFFF),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        _buildAboutDialog(context),
+                  );
+                  // Perform some action
+                },
+              ),
+              Align(
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      showInfo(context);
+                    },
+                    child: Icon(Icons.device_unknown),
+                    backgroundColor: Colors.blue,
+                  )),
               Align(
                   alignment: Alignment.bottomRight,
                   child: FloatingActionButton(
@@ -811,6 +1556,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       showPopup(context);
                     },
                     child: Icon(Icons.add),
+                    backgroundColor: Colors.blue,
+                  )),
+              Align(
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      showDisclaimer(context);
+                    },
+                    child: Icon(Icons.announcement),
                     backgroundColor: Colors.blue,
                   ))
             ]),
@@ -828,7 +1582,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       Container(
           padding: EdgeInsets.all(10.0),
           child: Column(children: <Widget>[
-            Text('this is resources stuff'),
+            ExpansionTile(
+                title: Column(children: <Widget>[Text('Citations: ')]),
+                children: <Widget>[
+                  Text("NY SNAP Policy Citations"),
+                  Text("placeholder"),
+                  Text("placeholder")
+                ]),
+            ExpansionTile(
+                title: Column(children: <Widget>[Text('Resources: ')]),
+                children: <Widget>[
+                  Text("NY SNAP Policy Citations"),
+                  Text("placeholder"),
+                  Text("placeholder")
+                ]),
+            ExpansionTile(
+                title: Column(children: <Widget>[Text('Contact: ')]),
+                children: <Widget>[
+                  Text("NY SNAP Policy Citations"),
+                  Text("placeholder"),
+                  Text("placeholder")
+                ]),
+            ExpansionTile(
+                title: Column(children: <Widget>[Text('Legal: ')]),
+                children: <Widget>[
+                  Text("NY SNAP Policy Citations"),
+                  Text("placeholder"),
+                  Text("placeholder")
+                ])
           ])),
 
       Container(
