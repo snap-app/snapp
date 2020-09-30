@@ -388,32 +388,7 @@ class Model {
     yourNetIncome = yourNYData[3];
     yourShelterExcess = yourNYData[4];
     yourStandardUtilityAllowance = yourNYData[5];
-/*    yourAdjustedIncome = calculator.yourAdjustedIncome;
-    yourStandardDeduction = calculator.yourStandardDeduction;
-    yourNetIncome = calculator.yourNetIncome;
-    yourShelterExcess = calculator.yourShelterExcess;
-    yourStandardUtilityAllowance = calculator.yourStandardUtilityAllowance;
-    [absoluteBenefit, adjustedIncome, standardDeduction, netIncome, shelterExcess, standardUtilityAllowance];*/
   }
-
-//  double getYourMax() {
-//    return yourMax;
-//  }
-//  double getYourBenefit() {
-//    return yourBenefit;
-//  }
-//  double getMonthlyIncome() {
-//    return monthlyIncome;
-//  }
-//  void setMonthlyIncome(double newIncome) {
-//    monthlyIncome = newIncome;
-//  }
-//  void setYourBenefit(double newYourBenefit) {
-//    yourBenefit = newYourBenefit;
-//  }
-//  void setYourMax(double newYourMax) {
-//    yourMax = newYourMax;
-//  }
 }
 
 class PopupLayout extends ModalRoute {
@@ -662,6 +637,157 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
+  showDisclaimer(BuildContext context, {BuildContext popupContext}) {
+    Navigator.push(
+        context,
+        PopupLayout(
+            top: 30,
+            left: 30,
+            right: 30,
+            bottom: 50,
+            child: StatefulBuilder(builder: (context, setState) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Calculator Disclaimer'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: true,
+                  body: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                            new Text(
+                                "The SNAPP Benefits Calculator should be used for screening purposes only. \n\nThe laws, regulations, rules and policies the calculator is based on are subject to change. \n\nWe make no representations or warranties, express or implied, as to the accuracy of the projected results. \n\nWe are not liable for any decision made or action taken by anyone in reliance upon the information obtained from this calculator. \n\nThe calculator is not endorsed by the public entities that administer the SNAP program and individuals who want to apply for SNAP benefits should submit an application to the government agency where official determinations are made. \n\nIf you are unsure about eligibility, don't hesitate to receive an official determination. There are many deductions and ways to calculate them, and you may be eligible for other benefits."),
+                            new Text(
+                                "There are also other disqualifying factors like immigration status, the gross monthly income test, SNAP limits for unemployed, childless adults, and asset thresholds that aren't otherwise used to calculate your benefit, so those factors are also not taken into account by this calculator. Only a caseworker can decide eligibility and give you the exact benefit amount.")
+                          ]))));
+            })));
+    setState(() {});
+  }
+
+  showInfo(BuildContext context, {BuildContext popupContext}) {
+    Navigator.push(
+        context,
+        PopupLayout(
+            top: 30,
+            left: 30,
+            right: 30,
+            bottom: 50,
+            child: StatefulBuilder(builder: (context, setState) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Navigation Guide'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: true,
+                  body: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                            Text(
+                                "Hi, this is our SNAPP Calculator and Info app. There are some tools in this app that can help you estimate your monthly benefits, look for stores with SNAP eligibility and food availability, get official determinations and more."),
+                            Text(
+                                "\nFirst is the SNAP Benefits Calculator on this page. The calculator you see behind this popup is a simplified calculator that takes three inputs-- your number of dependents, or household members, your household's monthly income, and your total number of deductions."),
+                            Text(
+                                "\nAll information you input in this calculator is private. All calculations are done locally, and nothing is stored in any other place. Rest assured that your information is 100% safe and not used for anything else but determining your potential benefit."),
+                            Text(
+                                "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other policies"),
+                            Text(
+                                "\n\nSome other resources included in this app are the ")
+                          ]))));
+            })));
+    setState(() {});
+  }
+
+  showStateChoices(BuildContext context, {BuildContext popupContext}) {
+    String dropdownValue = 'New York';
+    Navigator.push(
+        context,
+        PopupLayout(
+            top: 120,
+            left: 30,
+            right: 30,
+            bottom: 150,
+            child: StatefulBuilder(builder: (context, setState) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Advanced Calculator'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: true,
+                  body: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                            Text(
+                                "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York done-- more to come soon) "),
+                            DropdownButton<String>(
+                              value: dropdownValue,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(color: Colors.deepPurple),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValue = newValue;
+                                  if (dropdownValue == 'New York')
+                                    showPopup(context);
+                                });
+                              },
+                              items: <String>[
+                                'New York'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            )
+                          ]))));
+            })));
+    setState(() {});
+  }
+
   showPopup(BuildContext context, {BuildContext popupContext}) {
     Navigator.push(
         context,
@@ -708,8 +834,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                     householdSize
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (householdSize == null &&
-                                        int.tryParse(householdSize) ==
-                                            null))) {
+                                        int.tryParse(householdSize) == null))) {
                                   setState(() {
                                     model.yourHouseholdSize =
                                         int.parse(householdSize);
@@ -725,8 +850,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                     householdSize
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (householdSize == null &&
-                                        int.tryParse(householdSize) ==
-                                            null))) {
+                                        int.tryParse(householdSize) == null))) {
                                   setState(() {
                                     model.yourHouseholdSize =
                                         int.parse(householdSize);
@@ -743,8 +867,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                     householdSizeValidator
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (householdSizeValidator == null &&
-                                        int.tryParse(
-                                                householdSizeValidator) ==
+                                        int.tryParse(householdSizeValidator) ==
                                             null)) {
                                   model.yourHouseholdSize = 0;
                                   model.updateNYBenefit();
@@ -940,7 +1063,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                   border: InputBorder.none,
                                   hintText:
                                       'Dependent care (for children under 18 or disabled household members of any age ',
-                                  labelText: 'Dependent care costs (for children under 18 or disabled household members of any age)'),
+                                  labelText:
+                                      'Dependent care costs (for children under 18 or disabled household members of any age)'),
                               onChanged: (String inputtedCare) {
                                 if (!(inputtedCare
                                         .contains(new RegExp(r'[A-Z]')) ||
@@ -1348,92 +1472,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     setState(() {});
   }
 
-  showDisclaimer(BuildContext context, {BuildContext popupContext}) {
-    Navigator.push(
-        context,
-        PopupLayout(
-            top: 30,
-            left: 30,
-            right: 30,
-            bottom: 50,
-            child: StatefulBuilder(builder: (context, setState) {
-              return Scaffold(
-                  appBar: AppBar(
-                    title: Text('Calculator Disclaimer'),
-                    leading: new Builder(builder: (context) {
-                      return IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          try {
-                            Navigator.pop(context); //close the popup
-                          } catch (e) {}
-                        },
-                      );
-                    }),
-                    brightness: Brightness.light,
-                  ),
-                  resizeToAvoidBottomPadding: true,
-                  body: Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: SingleChildScrollView(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                            new Text(
-                                "The SNAPP Benefits Calculator should be used for screening purposes only. \n\nThe laws, regulations, rules and policies the calculator is based on are subject to change. \n\nWe make no representations or warranties, express or implied, as to the accuracy of the projected results. \n\nWe are not liable for any decision made or action taken by anyone in reliance upon the information obtained from this calculator. \n\nThe calculator is not endorsed by the public entities that administer the SNAP program and individuals who want to apply for SNAP benefits should submit an application to the government agency where official determinations are made. \n\nIf you are unsure about eligibility, don't hesitate to receive an official determination. There are many deductions and ways to calculate them, and you may be eligible for other benefits."),
-                            new Text(
-                                "There are also other disqualifying factors like immigration status, the gross monthly income test, SNAP limits for unemployed, childless adults, and asset thresholds that aren't otherwise used to calculate your benefit, so those factors are also not taken into account by this calculator. Only a caseworker can decide eligibility and give you the exact benefit amount.")
-                          ]))));
-            })));
-    setState(() {});
-  }
-
-  showInfo(BuildContext context, {BuildContext popupContext}) {
-    Navigator.push(
-        context,
-        PopupLayout(
-            top: 30,
-            left: 30,
-            right: 30,
-            bottom: 50,
-            child: StatefulBuilder(builder: (context, setState) {
-              return Scaffold(
-                  appBar: AppBar(
-                    title: Text('Navigation Guide'),
-                    leading: new Builder(builder: (context) {
-                      return IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          try {
-                            Navigator.pop(context); //close the popup
-                          } catch (e) {}
-                        },
-                      );
-                    }),
-                    brightness: Brightness.light,
-                  ),
-                  resizeToAvoidBottomPadding: true,
-                  body: Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: SingleChildScrollView(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                            Text(
-                                "Hi, this is our SNAPP Calculator and Info app. There are some tools in this app that can help you estimate your monthly benefits, look for stores with SNAP eligibility and food availability, get official determinations and more."),
-                            Text(
-                                "\nFirst is the SNAP Benefits Calculator on this page. The calculator you see behind this popup is a simplified calculator that takes three inputs-- your number of dependents, or household members, your household's monthly income, and your total number of deductions."),
-                            Text(
-                                "\nAll information you input in this calculator is private. All calculations are done locally, and nothing is stored in any other place. Rest assured that your information is 100% safe and not used for anything else but determining your potential benefit."),
-                            Text(
-                                "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other policies"),
-                            Text(
-                                "\n\nSome other resources included in this app are the ")
-                          ]))));
-            })));
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = [
@@ -1553,7 +1591,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   alignment: Alignment.bottomRight,
                   child: FloatingActionButton(
                     onPressed: () {
-                      showPopup(context);
+                      showStateChoices(context);
                     },
                     child: Icon(Icons.add),
                     backgroundColor: Colors.blue,
@@ -1592,9 +1630,52 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             ExpansionTile(
                 title: Column(children: <Widget>[Text('Resources: ')]),
                 children: <Widget>[
-                  Text("NY SNAP Policy Citations"),
-                  Text("placeholder"),
-                  Text("placeholder")
+                  ListView(children: <Widget>[
+                    Container(
+                        height: 50,
+                        color: Colors.lightBlue[800],
+                        child: Text(
+                            """None of the resources listed are affiliated with the SNAPP app. These resources were compiled by SNAPP app from governmental and nongovernmental websites. If you have questions, don’t hesitate to ask them at your local office.
+
+New York SNAP application and other resources: myBenefits (ny.gov)
+NY SNAP hotline: 1-800-342-3009
+
+Find your local SNAP Center: SNAP Locations - HRA (nyc.gov)
+
+Federal Nutrition Service Regional offices FNS Regional Offices | USDA-FNS
+
+Additional food aid for new parents: 
+WIC Program Information Special Supplemental Nutrition Program for Women, Infants, and Children (WIC) | USDA-FNS
+
+NY WIC Information WIC Program (ny.gov)
+
+Other states: SNAP State Directory of Resources | USDA-FNS
+
+Applying for WIC in NY How do I apply for WIC? (ny.gov)
+
+Other benefits and discounts an EBT card qualifies you for:
+Get Freebies with New York Food Stamps! - Low Income Relief (lowincomerelief.com)
+
+A very helpful list of other emergency food resources assembled by r/foodstamps: index/emergencyfood - foodstamps (reddit.com)
+Which is a forum that also has a lot of good resources and clarification in its wiki here: 
+index - foodstamps (reddit.com)
+
+Aid for other basic needs:
+Benefit finder questionnaire: Benefit Finder | Benefits.gov
+Home Energy Assitance Program (HEAP), helps with heating costs. Information about HEAP can also be found at myBenefits (ny.gov)
+
+
+Help with managing benefits and budgeting:
+
+SNAP food list: What Can SNAP Buy? | USDA-FNS
+
+Other apps, like FreshEBT etc. exist
+EBT eligible foods list
+
+Other resources and apps:
+Fresh EBT | Food Stamp Balance App for Android and iPhone (freshebt.com)
+"""))
+                  ])
                 ]),
             ExpansionTile(
                 title: Column(children: <Widget>[Text('Contact: ')]),
