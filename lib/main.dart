@@ -1620,22 +1620,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       Container(
           padding: EdgeInsets.all(10.0),
           child: Column(children: <Widget>[
-            ExpansionTile(
-                title: Column(children: <Widget>[Text('Citations: ')]),
-                children: <Widget>[
-                  Text("NY SNAP Policy Citations"),
-                  Text("placeholder"),
-                  Text("placeholder")
-                ]),
-            ExpansionTile(
-                title: Column(children: <Widget>[Text('Resources: ')]),
-                children: <Widget>[
-                  ListView(children: <Widget>[
-                    Container(
-                        height: 50,
-                        color: Colors.lightBlue[800],
-                        child: Text(
-                            """None of the resources listed are affiliated with the SNAPP app. These resources were compiled by SNAPP app from governmental and nongovernmental websites. If you have questions, don’t hesitate to ask them at your local office.
+            ExpansionTile(title: Text('Citations:'), children: <Widget>[
+              Text("NY SNAP Policy Citations"),
+              Text("placeholder"),
+              Text("placeholder")
+            ]),
+            ExpansionTile(title: Text('Resources:'), children: <Widget>[
+              Expanded(
+                  child: SizedBox(
+                      height: 600,
+                      child: Expanded(
+    child:ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 1,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, position) {
+                            return Expanded(
+                                child: Text(
+                                """None of the resources listed are affiliated with the SNAPP app. These resources were compiled by SNAPP app from governmental and nongovernmental websites. If you have questions, don’t hesitate to ask them at your local office.
 
 New York SNAP application and other resources: myBenefits (ny.gov)
 NY SNAP hotline: 1-800-342-3009
@@ -1674,9 +1676,9 @@ EBT eligible foods list
 
 Other resources and apps:
 Fresh EBT | Food Stamp Balance App for Android and iPhone (freshebt.com)
-"""))
-                  ])
-                ]),
+"""));
+                          })))
+              )]),
             ExpansionTile(
                 title: Column(children: <Widget>[Text('Contact: ')]),
                 children: <Widget>[
