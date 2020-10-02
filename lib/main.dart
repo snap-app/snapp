@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -1619,66 +1621,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       Container(
           padding: EdgeInsets.all(10.0),
-          child: Column(children: <Widget>[
-            ExpansionTile(title: Text('Citations:'), children: <Widget>[
-              Text("NY SNAP Policy Citations"),
-              Text("placeholder"),
-              Text("placeholder")
-            ]),
-            ExpansionTile(title: Text('Resources:'), children: <Widget>[
-              Expanded(
-                  child: SizedBox(
-                      height: 600,
-                      child: Expanded(
-    child:ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 1,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, position) {
-                            return Expanded(
-                                child: Text(
-                                """None of the resources listed are affiliated with the SNAPP app. These resources were compiled by SNAPP app from governmental and nongovernmental websites. If you have questions, don’t hesitate to ask them at your local office.
-
-New York SNAP application and other resources: myBenefits (ny.gov)
-NY SNAP hotline: 1-800-342-3009
-
-Find your local SNAP Center: SNAP Locations - HRA (nyc.gov)
-
-Federal Nutrition Service Regional offices FNS Regional Offices | USDA-FNS
-
-Additional food aid for new parents: 
-WIC Program Information Special Supplemental Nutrition Program for Women, Infants, and Children (WIC) | USDA-FNS
-
-NY WIC Information WIC Program (ny.gov)
-
-Other states: SNAP State Directory of Resources | USDA-FNS
-
-Applying for WIC in NY How do I apply for WIC? (ny.gov)
-
-Other benefits and discounts an EBT card qualifies you for:
-Get Freebies with New York Food Stamps! - Low Income Relief (lowincomerelief.com)
-
-A very helpful list of other emergency food resources assembled by r/foodstamps: index/emergencyfood - foodstamps (reddit.com)
-Which is a forum that also has a lot of good resources and clarification in its wiki here: 
-index - foodstamps (reddit.com)
-
-Aid for other basic needs:
-Benefit finder questionnaire: Benefit Finder | Benefits.gov
-Home Energy Assitance Program (HEAP), helps with heating costs. Information about HEAP can also be found at myBenefits (ny.gov)
-
-
-Help with managing benefits and budgeting:
-
-SNAP food list: What Can SNAP Buy? | USDA-FNS
-
-Other apps, like FreshEBT etc. exist
-EBT eligible foods list
-
-Other resources and apps:
-Fresh EBT | Food Stamp Balance App for Android and iPhone (freshebt.com)
-"""));
-                          })))
-              )]),
+          child: ListView(
+              children:/*<Widget>[Column(children:*/ <Widget>[
+            Flexible(
+                child: ExpansionTile(
+                    title: Text('Citations:'),
+                    children: <Widget>[
+                  Text("NY SNAP Policy Citations"),
+                  Text("placeholder"),
+                  Text("placeholder")
+                ])),
+            Flexible(
+                child:
+                    ExpansionTile(title: Text('Resources:'), children: <Widget>[
+              /*ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 1,
+                  itemBuilder: (context, position) {
+                    return */SelectableLinkify(
+                          onOpen: (link) async {
+                            if (await canLaunch(link.url)) {
+                              await launch(link.url);
+                            } else {
+                              throw 'Could not launch $link';
+                            }
+                          },
+                          style: TextStyle(color: Colors.black),
+                          linkStyle: TextStyle(color: Colors.blueAccent),
+                        text: "sup https://pub.dev/packages/url_launcher"
+                      )
+                  //})
+            ])),
             ExpansionTile(
                 title: Column(children: <Widget>[Text('Contact: ')]),
                 children: <Widget>[
