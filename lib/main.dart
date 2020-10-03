@@ -23,7 +23,7 @@ class Calculator {
   String yourArea;
   double yourAdjustedIncome;
   double yourStandardUtilityAllowance;
-  int yourStandardUtilityAllowanceLevel;
+  String yourStandardUtilityAllowanceLevel;
   double yourOtherShelterCosts;
   bool disabledOrElderly;
   double yourShelterExcess;
@@ -45,10 +45,10 @@ class Calculator {
     yourUnearnedIncome = 0;
     yourEarnedIncome = 0;
     yourRentOrMortgage = 0;
-    yourArea = '';
+    yourArea = "Rest of State";
     yourAdjustedIncome = 0;
-    yourStandardUtilityAllowance = 0;
-    yourStandardUtilityAllowanceLevel = 3;
+    yourStandardUtilityAllowance = 30;
+    yourStandardUtilityAllowanceLevel = "I have neither.";
     yourOtherShelterCosts = 0;
     disabledOrElderly = false;
     yourShelterExcess = 0;
@@ -116,41 +116,44 @@ class Calculator {
       return 0;
   }
 
-  static double getStandardUtilityAllowanacesNewYork(String area, int level) {
-    if (area == 'newYorkCity') {
-      if (level == 1) {
+  static double getStandardUtilityAllowancesNewYork(String area, String level) {
+    if (area == "New York City") {
+      if (level ==
+          "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)") {
         return 800;
       }
-      if (level == 2) {
+      if (level == "I have utility costs.") {
         return 316;
       }
-      if (level == 3) {
+      if (level == "I have neither.") {
         return 30;
       }
     }
-    if (area == 'nassauAndSuffolk') {
-      if (level == 1) {
+    if (area == "Nassau & Suffolk Counties") {
+      if (level ==
+          "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)") {
         return 744;
       }
-      if (level == 2) {
+      if (level == "I have utility costs.") {
         return 292;
       }
-      if (level == 3) {
+      if (level == "I have neither.") {
         return 30;
       }
     }
-    if (area == 'restOfState') {
-      if (level == 1) {
+    if (area == "Rest of State") {
+      if (level ==
+          "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)") {
         return 661;
       }
-      if (level == 2) {
+      if (level == "I have utility costs.") {
         return 268;
       }
-      if (level == 3) {
+      if (level == "I have neither.") {
         return 30;
       }
     }
-    return 0;
+    return 30;
   }
 
   static double getStandardUtilityAllowanacesNewYorkArea(String area) {
@@ -227,36 +230,47 @@ class Calculator {
       double medicalExpenses,
       double rentOrMortgage,
       String location,
-      int utilityAllowanceLevel,
+      String utilityAllowanceLevel,
       double otherShelter,
       bool disabledOrElderly) {
     double grossIncome = unearnedIncome + earnedIncome;
+
     double adjustedGrossIncome = grossIncome - childSupport;
+
     double earnedIncomeDeduction = earnedIncome * .2;
+
     double standardDeduction = getStandardDeduction(householdSize);
+
     double dependentCareDeduction = dependentCare;
     if (dependentAge < 2 && dependentCareDeduction > 200)
       dependentCareDeduction = 200;
     if (dependentAge >= 2 && dependentCareDeduction > 175)
       dependentCareDeduction = 175;
+
     double homelessDeduction = getHomelessDeduction(homelessnessStatus);
+
     double medicalDeduction = getAdjustedMedicalDeduction(medicalExpenses);
+
     double totalDeduction = earnedIncomeDeduction +
         standardDeduction +
         dependentCareDeduction +
         homelessDeduction +
         medicalDeduction;
+
     double adjustedIncome = adjustedGrossIncome - totalDeduction;
     if (adjustedIncome <= 0) adjustedIncome = 0;
+
+    double standardUtilityAllowance =
+        getStandardUtilityAllowancesNewYork(location, utilityAllowanceLevel);
+
     double shelterExcess = getShelterExcessNewYork(
         adjustedIncome,
         rentOrMortgage,
-        getStandardUtilityAllowanacesNewYork(location, utilityAllowanceLevel),
+        getStandardUtilityAllowancesNewYork(location, utilityAllowanceLevel),
         otherShelter,
         disabledOrElderly);
     double netIncome = adjustedIncome - shelterExcess;
-    double standardUtilityAllowance =
-        getStandardUtilityAllowanacesNewYork(location, utilityAllowanceLevel);
+
     double absoluteBenefit = getMaxBenefit(householdSize) - netIncome * .3;
     if (absoluteBenefit <= 0) {
       return [
@@ -327,7 +341,7 @@ class Model {
   String yourArea;
   double yourAdjustedIncome;
   double yourStandardUtilityAllowance;
-  int yourStandardUtilityAllowanceLevel;
+  String yourStandardUtilityAllowanceLevel;
   double yourOtherShelterCosts;
   bool disabledOrElderly;
   double yourShelterExcess;
@@ -350,10 +364,10 @@ class Model {
     yourUnearnedIncome = 0;
     yourEarnedIncome = 0;
     yourRentOrMortgage = 0;
-    yourArea = '';
+    yourArea = "Rest of State";
     yourAdjustedIncome = 0;
-    yourStandardUtilityAllowance = 0;
-    yourStandardUtilityAllowanceLevel = 3;
+    yourStandardUtilityAllowance = 30;
+    yourStandardUtilityAllowanceLevel = "I have neither.";
     yourOtherShelterCosts = 0;
     disabledOrElderly = false;
     yourShelterExcess = 0;
@@ -567,9 +581,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text("Your maximum is: " + model.yourMax.toString()),
-            new Text(
-                "Your estimated benefit is: " + model.yourNYBenefit.toString()),
+            RichText(
+              text: new TextSpan(
+                // Note: Styles for TextSpans must be explicitly defined.
+                // Child text spans will inherit styles from parent
+                style: new TextStyle(
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  new TextSpan(
+                      text: "Your maximum is: " + model.yourMax.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            RichText(
+              text: new TextSpan(
+                // Note: Styles for TextSpans must be explicitly defined.
+                // Child text spans will inherit styles from parent
+                style: new TextStyle(
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  new TextSpan(
+                      text: "Your estimated benefit is: " +
+                          model.yourNYBenefit.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Text(
+                "\n\nDo your best to fill out these questions. None of your info is saved anywhere else. If you don't know the exact answer, try to estimate or you can leave the field blank."),
             Text("\n \nFirst, your maximum possible benefit (\$" +
                 model.yourMax.toString() +
                 ") is calculated based on your household size.\n"),
@@ -579,21 +621,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 "The deduction is calculated from a variety of factors, in this process:\n"),
             Text("1. Child support expenses (\$" +
                 model.yourChildSupport.toString() +
-                ") are deducted from your gross income."),
+                ") are deducted from your gross income. This constitutes your adjusted gross income, which is used to determine eligibility against a gross income test.\n This estimator does not perform the gross income test, but you can find it or ask your local officials about it using resources in the resources section.\n"),
             Text("2. 20% of earned income (\$" +
                 (model.yourEarnedIncome * .2).toString() +
-                ") is further deducted."),
+                ") is further deducted.\n"),
             Text("3. A standard deduction based on your household size (\$" +
                 model.yourStandardDeduction.toString() +
-                ") is again deducted."),
+                ") is again deducted.\n"),
             Text("4. All dependent care costs (\$" +
                 model.yourDependentCareCosts.toString() +
-                "), or expenses for children under 18 years or disabled household members of any age, are deducted. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age."),
-            Text("5. If you are homeless, a deduction of \$152.06 is applied."),
+                "), or expenses for children under 18 years or disabled household members of any age, are deducted. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age.\n"),
             Text(
-                "6. Your medical expenses over \$35 a month for household members over 60 or disabled household members (\$" +
+                "5. If you are homeless, a deduction of \$152.06 is applied.\n"),
+            Text(
+                "6. Your medical expenses over \$35 a month ONLY for household members over 60 or disabled household members, that are not reimbursed by Title XVIII (Medicare) or XIX (Medicaid), (\$" +
                     model.yourMedicalExpenses.toString() +
-                    ") are deducted."),
+                    ") are deducted.\n"),
             Text("7. The deductions up to this point deducted from your gross income constitute your adjusted income (\$" +
                 model.yourAdjustedIncome.toString() +
                 "). A shelter excess deduction may be applied. Its size and eligibility are determined as follows:"), //TODO: Shelter excess may be calculated incorrectly. Everything else seems to work backend wise. The maximum benefit indicator does not work right now. Perhaps do away with it entirely and use the show calculation and benefit button (I think this is a very good option).
@@ -601,7 +644,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 model.yourRentOrMortgage.toString() +
                 "), your standard utility  allowance (\$" +
                 model.yourStandardUtilityAllowance.toString() +
-                "), determined by your location within NY, and your other shelter expenses (\$" +
+                "), determined by your location within NY (" +
+                model.yourArea +
+                ") and your level of utility payments (" +
+                model.yourStandardUtilityAllowanceLevel +
+                "), and your other shelter expenses (\$" +
                 model.yourOtherShelterCosts.toString() +
                 ")"), //TODO: Add the resource section and test some other margin cases. Add the disclaimer. Add some updates section ( you should talk to haoye about this one). Finally, maybe add some other states.
             Text("7b. Take your total shelter expenses (\$" +
@@ -612,10 +659,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 ") and then subtract half your adjusted income."),
             Text(
                 "7c. If this amount is greater to or equal than \$569, your shelter excess deduction is \$569. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$569. If the amount is negative, your deduction for this section is \$0."),
-            Text("8. Subtract the shelter excess calculated in step 7 (\$" +
+            Text("\n8. Subtract the shelter excess calculated in step 7 (\$" +
                 model.yourShelterExcess.toString() +
                 ") from your adjusted income calculated."),
-            Text("9. That leaves you with your net income (\$" +
+            Text("\n9. That leaves you with your net income (\$" +
                 model.yourNetIncome.toString() +
                 "). You are expected to put 30% of this figure towards food, which is subtracted from your maximum possible benefit of \$" +
                 model.yourMax.toString() +
@@ -623,7 +670,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 model.yourNYBenefit.toString() +
                 "."),
             Text(
-                "\nFor the calculation and deductions citations, and more, look in the resource tab.")
+                "\n\nTo see where we researched the calculations and deductions, and more, look in the Resources tab.")
           ],
         ),
       ),
@@ -712,14 +759,62 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                               children: <Widget>[
                             Text(
                                 "Hi, this is our SNAPP Calculator and Info app. There are some tools in this app that can help you estimate your monthly benefits, look for stores with SNAP eligibility and food availability, get official determinations and more."),
-                            Text(
-                                "\nFirst is the SNAP Benefits Calculator on this page. The calculator you see behind this popup is a simplified calculator that takes three inputs-- your number of dependents, or household members, your household's monthly income, and your total number of deductions."),
+                            RichText(
+                              text: new TextSpan(
+                                // Note: Styles for TextSpans must be explicitly defined.
+                                // Child text spans will inherit styles from parent
+                                style: new TextStyle(
+                                  color: Colors.black,
+                                ),
+                                children: <TextSpan>[
+                                  new TextSpan(
+                                      text:
+                                          "\nFirst is the SNAP Benefits Calculator on this page.",
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  new TextSpan(
+                                      text:
+                                          " The calculator you see behind this popup is a simplified calculator that takes three inputs-- your number of dependents, or household members, your household's monthly income, and your total number of deductions.")
+                                ],
+                              ),
+                            ),
                             Text(
                                 "\nAll information you input in this calculator is private. All calculations are done locally, and nothing is stored in any other place. Rest assured that your information is 100% safe and not used for anything else but determining your potential benefit."),
                             Text(
-                                "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other policies"),
-                            Text(
-                                "\n\nSome other resources included in this app are the ")
+                                "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other areas."),
+                            RichText(
+                              text: new TextSpan(
+                                // Note: Styles for TextSpans must be explicitly defined.
+                                // Child text spans will inherit styles from parent
+                                style: new TextStyle(
+                                  color: Colors.black,
+                                ),
+                                children: <TextSpan>[
+                                  new TextSpan(
+                                      text:
+                                          "\n\nSome other resources included in this app are: \n\nThe SNAPMAP Section ",
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  new TextSpan(
+                                      text:
+                                          "below, which contains the USDA FNS Retail Locator, which locates retailers that accept SNAP around your location. \n\nA host of other resources and information that might be helpful under the "),
+                                  new TextSpan(
+                                    text: "Resources Section.",
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  new TextSpan(
+                                    text:
+                                        "\n\nAnd, a stream of updates for SNAP policy updates and news under the",
+                                  ),
+                                  new TextSpan(
+                                    text: " Updates Section.",
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
                           ]))));
             })));
     setState(() {});
@@ -822,6 +917,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
+                            Text(
+                                "Questions? \nHit show calculation at bottom for clarification and help."),
                             TextFormField(
                               decoration: InputDecoration(
                                   icon: Icon(Icons.person),
@@ -1061,12 +1158,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                             ),
                             new TextFormField(
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.child_friendly),
-                                  border: InputBorder.none,
-                                  hintText:
-                                      'Dependent care (for children under 18 or disabled household members of any age ',
-                                  labelText:
-                                      'Dependent care costs (for children under 18 or disabled household members of any age)'),
+                                icon: Icon(Icons.child_friendly),
+                                border: InputBorder.none,
+                                hintText:
+                                    'Dependent care (for children under 18 or disabled household members of any age ',
+                                labelText:
+                                    'Dependent care costs (for children under 18 or disabled household members of any age)',
+                                labelStyle: TextStyle(fontSize: 8),
+                              ),
                               onChanged: (String inputtedCare) {
                                 if (!(inputtedCare
                                         .contains(new RegExp(r'[A-Z]')) ||
@@ -1214,7 +1313,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                   border: InputBorder.none,
                                   hintText:
                                       'How much do you pay per month for medical expenses for elderly or disabled household members? (costs not reimbursed by Title XVIII (Medicare) or XIX (Medicaid))',
-                                  labelText: 'Medical expenses '),
+                                  labelText:
+                                      'Medical expenses for elderly or disabled'),
                               onChanged: (String inputtedMedical) {
                                 if (!(inputtedMedical
                                         .contains(new RegExp(r'[A-Z]')) ||
@@ -1358,21 +1458,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                                   value: item,
                                   activeColor: Colors.blue,
                                   onChanged: (val) {
-                                    print(val);
                                     setState(() {
-                                      if (val ==
-                                          "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)")
-                                        model.yourStandardUtilityAllowanceLevel =
-                                            1;
-                                      else if (val == "I have utility costs.")
-                                        model.yourStandardUtilityAllowanceLevel =
-                                            2;
-                                      else if (val == "I have neither.")
-                                        model.yourStandardUtilityAllowanceLevel =
-                                            3;
-                                      else
-                                        model.yourStandardUtilityAllowanceLevel =
-                                            3;
+                                      model.yourStandardUtilityAllowanceLevel =
+                                          val;
                                       model.updateNYBenefit();
                                     });
                                   },
@@ -1626,11 +1714,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 child: ExpansionTile(
                     title: Column(children: <Widget>[Text('Contact:')]),
                     children: <Widget>[
-                  Text("""If you have any questions or concerns at all about anything, please don't hesitate to contact us at one of these places:\n\nEmail: snappestimatorapp@gmail.com\nPhone: (516) 268-1933 """),
+                  Text(
+                      """If you have any questions or concerns at all about anything, please don't hesitate to contact us at one of these places:\n\nEmail: snappestimatorapp@gmail.com\nPhone: (516) 268-1933 """),
                 ])),
             Flexible(
               child: ExpansionTile(
-                title:  Column(children: <Widget>[Text('Additional Resources:')]),
+                title:
+                    Column(children: <Widget>[Text('Additional Resources:')]),
                 children: <Widget>[
                   /*ListView.builder(
                   shrinkWrap: true,
@@ -1804,7 +1894,7 @@ Fresh EBT | Food Stamp Balance App for Android and iPhone (freshebt.com): https:
                   text: """
     SNAP Benefits Food Program | NYC https://www1.nyc.gov/site/hra/help/snap-benefits-food-program.page
     
-    SNAP: State by State Data, Fact Sheets, and Resources | Center on Budget and Policy Priorities (cbpp.org)
+    SNAP: State by State Data, Fact Sheets, and Resources | Center on Budget and Policy Priorities (cbpp.org) Contains information about other eligibility factors our estimator doesn't take into account, like asset limits and the gross income test. 
     https://www.cbpp.org/research/food-assistance/snap-state-by-state-data-fact-sheets-and-resources
 
     FSSB081706.book (ny.gov)
@@ -1827,7 +1917,8 @@ Fresh EBT | Food Stamp Balance App for Android and iPhone (freshebt.com): https:
             ExpansionTile(
                 title: Column(children: <Widget>[Text('Legal:')]),
                 children: <Widget>[
-                  Text("""We don’t make any guarantees to the accuracy of this information. We try and will continue to try our best to keep it updated and on par with policies-- but they change and we aren’t always the fastest. To be real, we’re just some broke kids who have no idea whether or not any of the disclaimers in this app are legit or will ever protect us from everything, we just want to make an app that might help a few people. Don’t sue us please and if you have any problems with anything here, come to us first and we’ll be really understanding. 
+                  Text(
+                      """We don’t make any guarantees to the accuracy of this information. We try and will continue to try our best to keep it updated and on par with policies-- but they change and we aren’t always the fastest. To be real, we’re just some broke kids who have no idea whether or not any of the disclaimers in this app are legit or will ever protect us from everything, we just want to make an app that might help a few people. Don’t sue us please and if you have any problems with anything here, come to us first and we’ll be really understanding. 
 
 Thanks and stay safe! """),
                 ])
