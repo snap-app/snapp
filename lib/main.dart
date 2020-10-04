@@ -271,6 +271,10 @@ class Calculator {
         getStandardUtilityAllowancesNewYork(location, utilityAllowanceLevel),
         otherShelter,
         disabledOrElderly);
+
+    if (homelessnessStatus)
+      shelterExcess = 0;
+
     double netIncome = adjustedIncome - shelterExcess;
 
     double absoluteBenefit = getMaxBenefit(householdSize) - netIncome * .3;

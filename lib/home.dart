@@ -58,23 +58,35 @@ class HomeState extends State<Home> {
                 "\n\nDo your best to fill out these questions. None of your info is saved anywhere else. If you don't know the exact answer, try to estimate or you can leave the field blank."),
             Text("\n \nFirst, your maximum possible benefit (\$" +
                 widget.model.yourMax.toString() +
-                ") is calculated based on your household size.\n"),
+                ") is calculated based on your household size. You can be a separate filing group even if you live with family or other people, as long as you purchase and prepare food separately. Individuals can only receive FS as a member of one household per month. \n"),
             Text(
-                "Then, you are expected to pay 30% of your adjusted income (after deductions provided for necessary expenses and other conditions). That value is subtracted from your household maximum.\n"),
+                """Then, you determine your monthly gross income, a combination of your earned and unearned income. Unearned income is passive income including, but not limited to: 
+
+Assistance payments
+Annuities, pensions, retirement, veterans’ or disability benefits, workers’ or unemployment compensation
+Gross income derived from rental property 
+Support or alimony payments
+Military pay, except additional pay based on deployment to a combat zone
+Dividends, except from insurance policies
+Interest
+Royalties
+Government sponsored program payments
+
+            \n"""),
             Text(
-                "The deduction is calculated from a variety of factors, in this process:\n"),
-            Text("1. Child support expenses (\$" +
+                "Next, a series of deduction and exclusions are applied, calculated from a variety of factors in this process:\n"),
+            Text("1. Legally obligated child support expenses, direct and indirect, (\$" +
                 widget.model.yourChildSupport.toString() +
-                ") are deducted from your gross income. This constitutes your adjusted gross income, which is used to determine eligibility against a gross income test.\n This estimator does not perform the gross income test, but you can find it or ask your local officials about it using resources in the resources section.\n"),
+                ") are deducted from your gross income. This does not include alimony or spousal support. Child support is an income exclusion, so this figure constitutes your adjusted gross income, which is used to determine eligibility against a gross income test.\n This estimator does not perform the gross income test, but you can find it or ask your local officials about it using resources in the resources section.\n"),
             Text("2. 20% of earned income (\$" +
                 (widget.model.yourEarnedIncome * .2).toString() +
                 ") is further deducted.\n"),
             Text("3. A standard deduction based on your household size (\$" +
                 widget.model.yourStandardDeduction.toString() +
                 ") is again deducted.\n"),
-            Text("4. All dependent care costs (\$" +
+            Text("4. All actual dependent care costs (\$" +
                 widget.model.yourDependentCareCosts.toString() +
-                "), or expenses for children under 18 years or disabled household members of any age, are deducted. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age.\n"),
+                "), or expenses for the care of children under 18 years or incapacitated of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age.\n"),
             Text(
                 "5. If you are homeless, a deduction of \$152.06 is applied.\n"),
             Text(
@@ -102,7 +114,7 @@ class HomeState extends State<Home> {
                     .toString() +
                 ") and then subtract half your adjusted income."),
             Text(
-                "7c. If this amount is greater to or equal than \$569, your shelter excess deduction is \$569. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$569. If the amount is negative, your deduction for this section is \$0."),
+                "7c. If this amount is greater to or equal than \$569, your shelter excess deduction is \$569. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$569. If the amount is negative, or if you are homeless (" + widget.model.yourHomelessnessStatus.toString() + "), your deduction for this section is \$0."),
             Text("\n8. Subtract the shelter excess calculated in step 7 (\$" +
                 widget.model.yourShelterExcess.toString() +
                 ") from your adjusted income calculated."),
@@ -1044,7 +1056,7 @@ class HomeState extends State<Home> {
               decoration: InputDecoration(
                   icon: Icon(Icons.person),
                   border: InputBorder.none,
-                  hintText: 'What is your household size?',
+                  hintText: 'What is your household filing group?',
                   labelText: 'Number of dependents (not necessarily family)'),
               onChanged: (String numOfPeople) {
                 if (!(numOfPeople.contains('@') ||
