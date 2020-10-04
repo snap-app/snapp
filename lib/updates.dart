@@ -79,7 +79,7 @@ class UpdatesState extends State<Updates> {
     // );
     return FutureBuilder(
       future: _parseUrlList(),
-      builder: (context,snapshot) {
+      builder: (context, snapshot) {
         return Container(
           child: ListView.builder(
             itemCount: urlAmount,

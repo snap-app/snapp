@@ -1,6 +1,6 @@
 # snapp
 
-the snapp app
+A new Flutter project.
 
 ## Getting Started
 
