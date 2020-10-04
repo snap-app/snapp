@@ -18,7 +18,7 @@ class HomeState extends State<Home> {
   Widget _buildAboutAdvanced(BuildContext context) {
     widget.model.updateNYBenefit();
     return new AlertDialog(
-      title: const Text('NY Full Calculation:'),
+      title: const Text('NY Full Estimation:'),
       content: new SingleChildScrollView(
         child: //StatefulBuilder(builder: (context, setState) {
         Column(
@@ -264,7 +264,7 @@ Government sponsored program payments
                                         "\n\nAnd, a stream of updates for SNAP policy updates and news under the",
                                       ),
                                       new TextSpan(
-                                        text: " Updates Section.",
+                                        text: " Updates Section-- coming soon.",
                                         style: new TextStyle(
                                             fontWeight: FontWeight.bold),
                                       )
@@ -288,7 +288,7 @@ Government sponsored program payments
             child: StatefulBuilder(builder: (context, setState) {
               return Scaffold(
                   appBar: AppBar(
-                    title: Text('Advanced Calculator'),
+                    title: Text('Advanced Estimator'),
                     leading: new Builder(builder: (context) {
                       return IconButton(
                         icon: Icon(Icons.arrow_back),
@@ -1020,7 +1020,7 @@ Government sponsored program payments
 
   Widget _buildAboutDialog(BuildContext context) {
     return new AlertDialog(
-      title: const Text('Simplified Calculation:'),
+      title: const Text('Simplified Estimate:'),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1030,7 +1030,7 @@ Government sponsored program payments
           Text(
               "Then, you are expected to pay 30% of your adjusted income (after deductions provided for necessary expenses and other conditions). That value is subtracted from your household maximum.\n"),
           Text(
-              "Equation: Household Maximum - (income - deductions) x .3 \n\nFor the calculation citations and more, look in the resource tab.")
+              "Equation: Household Maximum - (income - deductions) x .3 \n\nFor the estimation citations and more, look in the resource tab.")
         ],
       ),
       actions: <Widget>[
@@ -1136,7 +1136,7 @@ Government sponsored program payments
             new Text(
                 "Your estimated benefit: " + widget.model.yourBenefit.toString()),
             new RaisedButton(
-              child: const Text('Show Calculation Steps'),
+              child: const Text('Show Estimation Steps'),
               color: Theme.of(context).accentColor,
               elevation: 4.0,
               splashColor: Colors.amberAccent,

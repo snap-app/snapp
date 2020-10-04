@@ -309,7 +309,7 @@ class Calculator {
 }
 
 class MyApp extends StatelessWidget {
-  static const String _title = "SNAPP Calculator and Resources";
+  static const String _title = "SNAP Estimator and Resources";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -568,7 +568,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('SnAP Calculator'),
+        title: Text('SNAP ToolCenter NY'),
         centerTitle: true,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
