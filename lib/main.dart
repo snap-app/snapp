@@ -272,8 +272,7 @@ class Calculator {
         otherShelter,
         disabledOrElderly);
 
-    if (homelessnessStatus)
-      shelterExcess = 0;
+    if (homelessnessStatus) shelterExcess = 0;
 
     double netIncome = adjustedIncome - shelterExcess;
 

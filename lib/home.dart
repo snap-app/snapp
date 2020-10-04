@@ -5,8 +5,12 @@ class Home extends StatefulWidget {
   final Model model;
   final List<String> choices;
   final List<String> choices2;
-  Home({Key key, @required this.model, @required this.choices, @required this.choices2}) : super(key: key);
-
+  Home(
+      {Key key,
+      @required this.model,
+      @required this.choices,
+      @required this.choices2})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +25,7 @@ class HomeState extends State<Home> {
       title: const Text('NY Full Calculation:'),
       content: new SingleChildScrollView(
         child: //StatefulBuilder(builder: (context, setState) {
-        Column(
+            Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -34,7 +38,8 @@ class HomeState extends State<Home> {
                 ),
                 children: <TextSpan>[
                   new TextSpan(
-                      text: "Your maximum is: " + widget.model.yourMax.toString(),
+                      text:
+                          "Your maximum is: " + widget.model.yourMax.toString(),
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
@@ -109,12 +114,14 @@ Government sponsored program payments
                 ")"), //TODO: Add the resource section and test some other margin cases. Add the disclaimer. Add some updates section ( you should talk to haoye about this one). Finally, maybe add some other states.
             Text("7b. Take your total shelter expenses (\$" +
                 (widget.model.yourOtherShelterCosts +
-                    widget.model.yourRentOrMortgage +
-                    widget.model.yourStandardUtilityAllowance)
+                        widget.model.yourRentOrMortgage +
+                        widget.model.yourStandardUtilityAllowance)
                     .toString() +
                 ") and then subtract half your adjusted income."),
             Text(
-                "7c. If this amount is greater to or equal than \$569, your shelter excess deduction is \$569. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$569. If the amount is negative, or if you are homeless (" + widget.model.yourHomelessnessStatus.toString() + "), your deduction for this section is \$0."),
+                "7c. If this amount is greater to or equal than \$569, your shelter excess deduction is \$569. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$569. If the amount is negative, or if you are homeless (" +
+                    widget.model.yourHomelessnessStatus.toString() +
+                    "), your deduction for this section is \$0."),
             Text("\n8. Subtract the shelter excess calculated in step 7 (\$" +
                 widget.model.yourShelterExcess.toString() +
                 ") from your adjusted income calculated."),
@@ -173,11 +180,11 @@ Government sponsored program payments
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
-                                new Text(
-                                    "The SNAPP Benefits Calculator should be used for screening purposes only. \n\nThe laws, regulations, rules and policies the calculator is based on are subject to change. \n\nWe make no representations or warranties, express or implied, as to the accuracy of the projected results. \n\nWe are not liable for any decision made or action taken by anyone in reliance upon the information obtained from this calculator. \n\nThe calculator is not endorsed by the public entities that administer the SNAP program and individuals who want to apply for SNAP benefits should submit an application to the government agency where official determinations are made. \n\nIf you are unsure about eligibility, don't hesitate to receive an official determination. There are many deductions and ways to calculate them, and you may be eligible for other benefits."),
-                                new Text(
-                                    "There are also other disqualifying factors like immigration status, the gross monthly income test, SNAP limits for unemployed, childless adults, and asset thresholds that aren't otherwise used to calculate your benefit, so those factors are also not taken into account by this calculator. Only a caseworker can decide eligibility and give you the exact benefit amount.")
-                              ]))));
+                            new Text(
+                                "The SNAPP Benefits Calculator should be used for screening purposes only. \n\nThe laws, regulations, rules and policies the calculator is based on are subject to change. \n\nWe make no representations or warranties, express or implied, as to the accuracy of the projected results. \n\nWe are not liable for any decision made or action taken by anyone in reliance upon the information obtained from this calculator. \n\nThe calculator is not endorsed by the public entities that administer the SNAP program and individuals who want to apply for SNAP benefits should submit an application to the government agency where official determinations are made. \n\nIf you are unsure about eligibility, don't hesitate to receive an official determination. There are many deductions and ways to calculate them, and you may be eligible for other benefits."),
+                            new Text(
+                                "There are also other disqualifying factors like immigration status, the gross monthly income test, SNAP limits for unemployed, childless adults, and asset thresholds that aren't otherwise used to calculate your benefit, so those factors are also not taken into account by this calculator. Only a caseworker can decide eligibility and give you the exact benefit amount.")
+                          ]))));
             })));
     setState(() {});
   }
@@ -213,65 +220,65 @@ Government sponsored program payments
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
-                                Text(
-                                    "Hi, this is our SNAPP Calculator and Info app. There are some tools in this app that can help you estimate your monthly benefits, look for stores with SNAP eligibility and food availability, get official determinations and more."),
-                                RichText(
-                                  text: new TextSpan(
-                                    // Note: Styles for TextSpans must be explicitly defined.
-                                    // Child text spans will inherit styles from parent
-                                    style: new TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    children: <TextSpan>[
-                                      new TextSpan(
-                                          text:
+                            Text(
+                                "Hi, this is our SNAPP Calculator and Info app. There are some tools in this app that can help you estimate your monthly benefits, look for stores with SNAP eligibility and food availability, get official determinations and more."),
+                            RichText(
+                              text: new TextSpan(
+                                // Note: Styles for TextSpans must be explicitly defined.
+                                // Child text spans will inherit styles from parent
+                                style: new TextStyle(
+                                  color: Colors.black,
+                                ),
+                                children: <TextSpan>[
+                                  new TextSpan(
+                                      text:
                                           "\nFirst is the SNAP Benefits Calculator on this page.",
-                                          style: new TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      new TextSpan(
-                                          text:
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  new TextSpan(
+                                      text:
                                           " The calculator you see behind this popup is a simplified calculator that takes three inputs-- your number of dependents, or household members, your household's monthly income, and your total number of deductions.")
-                                    ],
-                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                                "\nAll information you input in this calculator is private. All calculations are done locally, and nothing is stored in any other place. Rest assured that your information is 100% safe and not used for anything else but determining your potential benefit."),
+                            Text(
+                                "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other areas."),
+                            RichText(
+                              text: new TextSpan(
+                                // Note: Styles for TextSpans must be explicitly defined.
+                                // Child text spans will inherit styles from parent
+                                style: new TextStyle(
+                                  color: Colors.black,
                                 ),
-                                Text(
-                                    "\nAll information you input in this calculator is private. All calculations are done locally, and nothing is stored in any other place. Rest assured that your information is 100% safe and not used for anything else but determining your potential benefit."),
-                                Text(
-                                    "\nIf you don't have an idea of how much your potential deductions might be, you can answer some other questions in the advanced calculator (under the + icon). Currently, the advanced calculator only supports estimates according to NY SNAP policies. We'll work to add estimates for other areas."),
-                                RichText(
-                                  text: new TextSpan(
-                                    // Note: Styles for TextSpans must be explicitly defined.
-                                    // Child text spans will inherit styles from parent
-                                    style: new TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    children: <TextSpan>[
-                                      new TextSpan(
-                                          text:
+                                children: <TextSpan>[
+                                  new TextSpan(
+                                      text:
                                           "\n\nSome other resources included in this app are: \n\nThe SNAPMAP Section ",
-                                          style: new TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      new TextSpan(
-                                          text:
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  new TextSpan(
+                                      text:
                                           "below, which contains the USDA FNS Retail Locator, which locates retailers that accept SNAP around your location. \n\nA host of other resources and information that might be helpful under the "),
-                                      new TextSpan(
-                                        text: "Resources Section.",
-                                        style: new TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      new TextSpan(
-                                        text:
-                                        "\n\nAnd, a stream of updates for SNAP policy updates and news under the",
-                                      ),
-                                      new TextSpan(
-                                        text: " Updates Section.",
-                                        style: new TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
+                                  new TextSpan(
+                                    text: "Resources Section.",
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                              ]))));
+                                  new TextSpan(
+                                    text:
+                                        "\n\nAnd, a stream of updates for SNAP policy updates and news under the",
+                                  ),
+                                  new TextSpan(
+                                    text: " Updates Section.",
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ]))));
             })));
     setState(() {});
   }
@@ -308,35 +315,35 @@ Government sponsored program payments
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
-                                Text(
-                                    "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York done-- more to come soon) "),
-                                DropdownButton<String>(
-                                  value: dropdownValue,
-                                  icon: Icon(Icons.arrow_downward),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  style: TextStyle(color: Colors.deepPurple),
-                                  underline: Container(
-                                    height: 2,
-                                    color: Colors.deepPurpleAccent,
-                                  ),
-                                  onChanged: (String newValue) {
-                                    setState(() {
-                                      dropdownValue = newValue;
-                                      if (dropdownValue == 'New York')
-                                        showPopup(context);
-                                    });
-                                  },
-                                  items: <String>[
-                                    'New York'
-                                  ].map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                )
-                              ]))));
+                            Text(
+                                "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York done-- more to come soon) "),
+                            DropdownButton<String>(
+                              value: dropdownValue,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(color: Colors.deepPurple),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValue = newValue;
+                                  if (dropdownValue == 'New York')
+                                    showPopup(context);
+                                });
+                              },
+                              items: <String>[
+                                'New York'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            )
+                          ]))));
             })));
     setState(() {});
   }
@@ -380,7 +387,7 @@ Government sponsored program payments
                                   icon: Icon(Icons.person),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How many people live in your household? ',
+                                      'How many people live in your household? ',
                                   labelText: 'Household size: '),
                               onChanged: (String householdSize) {
                                 if (!(householdSize.contains('@') ||
@@ -428,15 +435,15 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return householdSizeValidator.contains('@') ||
-                                    householdSizeValidator.contains('.') ||
-                                    householdSizeValidator
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    householdSizeValidator
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (householdSizeValidator == null &&
-                                        int.tryParse(
-                                            householdSizeValidator) ==
-                                            null)
+                                        householdSizeValidator.contains('.') ||
+                                        householdSizeValidator
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        householdSizeValidator
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (householdSizeValidator == null &&
+                                            int.tryParse(
+                                                    householdSizeValidator) ==
+                                                null)
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -447,9 +454,9 @@ Government sponsored program payments
                                   icon: Icon(Icons.child_care),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How much child support do you pay monthly? ',
+                                      'How much child support do you pay monthly? ',
                                   labelText:
-                                  'Monthly child support payment (optional) '),
+                                      'Monthly child support payment (optional) '),
                               onChanged: (String childSupport) {
                                 if (!(childSupport.contains('@') ||
                                     childSupport
@@ -495,13 +502,13 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return childSupport.contains('@') ||
-                                    childSupport
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    childSupport
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (childSupport == null &&
-                                        double.tryParse(childSupport) ==
-                                            null)
+                                        childSupport
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        childSupport
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (childSupport == null &&
+                                            double.tryParse(childSupport) ==
+                                                null)
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -512,11 +519,11 @@ Government sponsored program payments
                                   icon: Icon(Icons.attach_money),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
+                                      'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
                                   labelText: 'Unearned monthly income '),
                               onChanged: (String inputtedIncome) {
                                 if (!(inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedIncome
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedIncome == null &&
@@ -524,14 +531,14 @@ Government sponsored program payments
                                             null))) {
                                   setState(() {
                                     widget.model.yourUnearnedIncome =
-                                    (double.parse(inputtedIncome));
+                                        (double.parse(inputtedIncome));
                                     widget.model.updateNYBenefit();
                                   });
                                 }
                               },
                               validator: (String inputtedIncome) {
                                 if (inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedIncome
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedIncome == null &&
@@ -541,12 +548,12 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return (inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedIncome
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (inputtedIncome == null &&
-                                        double.tryParse(inputtedIncome) ==
-                                            null))
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedIncome
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedIncome == null &&
+                                            double.tryParse(inputtedIncome) ==
+                                                null))
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -557,11 +564,11 @@ Government sponsored program payments
                                   icon: Icon(Icons.attach_money),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How much of your monthly income is earned? (income from work, not gained passively from savings, rent, or benefits)',
+                                      'How much of your monthly income is earned? (income from work, not gained passively from savings, rent, or benefits)',
                                   labelText: 'Earned monthly income '),
                               onChanged: (String inputtedIncome) {
                                 if (!(inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedIncome
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedIncome == null &&
@@ -569,14 +576,14 @@ Government sponsored program payments
                                             null))) {
                                   setState(() {
                                     widget.model.yourEarnedIncome =
-                                    (double.parse(inputtedIncome));
+                                        (double.parse(inputtedIncome));
                                     widget.model.updateNYBenefit();
                                   });
                                 }
                               },
                               onSaved: (String inputtedIncome) {
                                 if (!(inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedIncome
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedIncome == null &&
@@ -584,14 +591,14 @@ Government sponsored program payments
                                             null))) {
                                   setState(() {
                                     widget.model.yourEarnedIncome =
-                                    (double.parse(inputtedIncome));
+                                        (double.parse(inputtedIncome));
                                     widget.model.updateNYBenefit();
                                   });
                                 }
                               },
                               validator: (String inputtedIncome) {
                                 if (inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedIncome
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedIncome == null &&
@@ -601,12 +608,12 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return (inputtedIncome
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedIncome
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (inputtedIncome == null &&
-                                        double.tryParse(inputtedIncome) ==
-                                            null))
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedIncome
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedIncome == null &&
+                                            double.tryParse(inputtedIncome) ==
+                                                null))
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -617,14 +624,14 @@ Government sponsored program payments
                                 icon: Icon(Icons.child_friendly),
                                 border: InputBorder.none,
                                 hintText:
-                                'Dependent care (for children under 18 or disabled household members of any age ',
+                                    'Dependent care (for children under 18 or disabled household members of any age ',
                                 labelText:
-                                'Dependent care costs (for children under 18 or disabled household members of any age)',
+                                    'Dependent care costs (for children under 18 or disabled household members of any age)',
                                 labelStyle: TextStyle(fontSize: 8),
                               ),
                               onChanged: (String inputtedCare) {
                                 if (!(inputtedCare
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedCare
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedCare == null &&
@@ -639,7 +646,7 @@ Government sponsored program payments
                               },
                               onSaved: (String inputtedCare) {
                                 if (!(inputtedCare
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedCare
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedCare == null &&
@@ -654,7 +661,7 @@ Government sponsored program payments
                               },
                               validator: (String inputtedCare) {
                                 if (inputtedCare
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedCare
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedCare == null &&
@@ -664,9 +671,9 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return (inputtedCare
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedCare
-                                        .contains(new RegExp(r'[a-z]')))
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedCare
+                                            .contains(new RegExp(r'[a-z]')))
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -677,14 +684,14 @@ Government sponsored program payments
                                   icon: Icon(Icons.cake),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How old is the dependent you care for? (expenses from last question ',
+                                      'How old is the dependent you care for? (expenses from last question ',
                                   labelText: 'Dependent Age: '),
                               onChanged: (String dependentAge) {
                                 if (!(dependentAge.contains('@') ||
-                                    dependentAge
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    dependentAge
-                                        .contains(new RegExp(r'[a-z]'))) ||
+                                        dependentAge
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        dependentAge
+                                            .contains(new RegExp(r'[a-z]'))) ||
                                     (dependentAge == null &&
                                         int.tryParse(dependentAge) == null)) {
                                   setState(() {
@@ -723,15 +730,15 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return dependentAgeValidator.contains('@') ||
-                                    dependentAgeValidator.contains('.') ||
-                                    dependentAgeValidator
-                                        .contains(new RegExp(r'[A-Z]')) ||
-                                    dependentAgeValidator
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (dependentAgeValidator == null &&
-                                        int.tryParse(
-                                            dependentAgeValidator) ==
-                                            null)
+                                        dependentAgeValidator.contains('.') ||
+                                        dependentAgeValidator
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        dependentAgeValidator
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (dependentAgeValidator == null &&
+                                            int.tryParse(
+                                                    dependentAgeValidator) ==
+                                                null)
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -745,7 +752,8 @@ Government sponsored program payments
                                   value: widget.model.yourHomelessnessStatus,
                                   onChanged: (bool value) {
                                     setState(() {
-                                      widget.model.yourHomelessnessStatus = value;
+                                      widget.model.yourHomelessnessStatus =
+                                          value;
                                       widget.model.updateNYBenefit();
                                     });
                                   },
@@ -768,12 +776,12 @@ Government sponsored program payments
                                   icon: Icon(Icons.local_hospital),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How much do you pay per month for medical expenses for elderly or disabled household members? (costs not reimbursed by Title XVIII (Medicare) or XIX (Medicaid))',
+                                      'How much do you pay per month for medical expenses for elderly or disabled household members? (costs not reimbursed by Title XVIII (Medicare) or XIX (Medicaid))',
                                   labelText:
-                                  'Medical expenses for elderly or disabled'),
+                                      'Medical expenses for elderly or disabled'),
                               onChanged: (String inputtedMedical) {
                                 if (!(inputtedMedical
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedMedical
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedMedical == null &&
@@ -788,7 +796,7 @@ Government sponsored program payments
                               },
                               onSaved: (String inputtedMedical) {
                                 if (!(inputtedMedical
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedMedical
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedMedical == null &&
@@ -803,7 +811,7 @@ Government sponsored program payments
                               },
                               validator: (String inputtedMedical) {
                                 if (inputtedMedical
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedMedical
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedMedical == null &&
@@ -813,10 +821,10 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return (inputtedMedical
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedMedical
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    inputtedMedical == null)
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedMedical
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        inputtedMedical == null)
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -827,11 +835,11 @@ Government sponsored program payments
                                   icon: Icon(Icons.home),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How much do you pay for rent/mortgage each month? ',
+                                      'How much do you pay for rent/mortgage each month? ',
                                   labelText: 'Rent/mortgage '),
                               onSaved: (String inputtedRent) {
                                 if (!(inputtedRent
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedRent
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedRent == null &&
@@ -846,7 +854,7 @@ Government sponsored program payments
                               },
                               onChanged: (String inputtedRent) {
                                 if (!(inputtedRent
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedRent
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedRent == null &&
@@ -861,7 +869,7 @@ Government sponsored program payments
                               },
                               validator: (String inputtedRent) {
                                 if (inputtedRent
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedRent
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedRent == null &&
@@ -871,12 +879,12 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return (inputtedRent
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedRent
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (inputtedRent == null &&
-                                        double.tryParse(inputtedRent) ==
-                                            null))
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedRent
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedRent == null &&
+                                            double.tryParse(inputtedRent) ==
+                                                null))
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -908,14 +916,15 @@ Government sponsored program payments
                               children: widget.choices2.map((item) {
                                 //change index of choices array as you need
                                 return RadioListTile(
-                                  groupValue:
-                                  widget.model.yourStandardUtilityAllowanceLevel,
+                                  groupValue: widget
+                                      .model.yourStandardUtilityAllowanceLevel,
                                   title: Text(item),
                                   value: item,
                                   activeColor: Colors.blue,
                                   onChanged: (val) {
                                     setState(() {
-                                      widget.model.yourStandardUtilityAllowanceLevel =
+                                      widget.model
+                                              .yourStandardUtilityAllowanceLevel =
                                           val;
                                       widget.model.updateNYBenefit();
                                     });
@@ -928,12 +937,12 @@ Government sponsored program payments
                                   icon: Icon(Icons.add),
                                   border: InputBorder.none,
                                   hintText:
-                                  'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
+                                      'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
                                   labelText:
-                                  'Other shelter expenses (non-utility/rent) '),
+                                      'Other shelter expenses (non-utility/rent) '),
                               onSaved: (String inputtedShelter) {
                                 if (!(inputtedShelter
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedShelter
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedShelter == null &&
@@ -948,7 +957,7 @@ Government sponsored program payments
                               },
                               onChanged: (String inputtedShelter) {
                                 if (!(inputtedShelter
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedShelter
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedShelter == null &&
@@ -963,7 +972,7 @@ Government sponsored program payments
                               },
                               validator: (String inputtedShelter) {
                                 if (inputtedShelter
-                                    .contains(new RegExp(r'[A-Z]')) ||
+                                        .contains(new RegExp(r'[A-Z]')) ||
                                     inputtedShelter
                                         .contains(new RegExp(r'[a-z]')) ||
                                     (inputtedShelter == null &&
@@ -973,12 +982,12 @@ Government sponsored program payments
                                   widget.model.updateNYBenefit();
                                 }
                                 return (inputtedShelter
-                                    .contains(new RegExp(r'[A-Z]')) ||
-                                    inputtedShelter
-                                        .contains(new RegExp(r'[a-z]')) ||
-                                    (inputtedShelter == null &&
-                                        double.tryParse(inputtedShelter) ==
-                                            null))
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedShelter
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedShelter == null &&
+                                            double.tryParse(inputtedShelter) ==
+                                                null))
                                     ? 'Only use numbers.'
                                     : null;
                               },
@@ -997,7 +1006,7 @@ Government sponsored program payments
                             ),
                             new RaisedButton(
                               child:
-                              const Text('Show Benefit and Calculations'),
+                                  const Text('Show Benefit and Calculations'),
                               color: Theme.of(context).accentColor,
                               elevation: 4.0,
                               splashColor: Colors.amberAccent,
@@ -1071,11 +1080,11 @@ Government sponsored program payments
               },
               validator: (String numOfPeople) {
                 return numOfPeople.contains('@') ||
-                    numOfPeople.contains('.') ||
-                    numOfPeople.contains(new RegExp(r'[A-Z]')) ||
-                    numOfPeople.contains(new RegExp(r'[a-z]')) ||
-                    (numOfPeople == null &&
-                        double.tryParse(numOfPeople) == null)
+                        numOfPeople.contains('.') ||
+                        numOfPeople.contains(new RegExp(r'[A-Z]')) ||
+                        numOfPeople.contains(new RegExp(r'[a-z]')) ||
+                        (numOfPeople == null &&
+                            double.tryParse(numOfPeople) == null)
                     ? 'Only use whole numbers.'
                     : null;
               },
@@ -1100,9 +1109,9 @@ Government sponsored program payments
               },
               validator: (String inputtedIncome) {
                 return (inputtedIncome.contains(new RegExp(r'[A-Z]')) ||
-                    inputtedIncome.contains(new RegExp(r'[a-z]')) ||
-                    (inputtedIncome == null &&
-                        double.tryParse(inputtedIncome) == null))
+                        inputtedIncome.contains(new RegExp(r'[a-z]')) ||
+                        (inputtedIncome == null &&
+                            double.tryParse(inputtedIncome) == null))
                     ? 'Only use numbers.'
                     : null;
               },
@@ -1113,9 +1122,9 @@ Government sponsored program payments
                   icon: Icon(Icons.arrow_downward),
                   border: InputBorder.none,
                   hintText:
-                  'What is your estimated total deductions? Use the advanced tool if you\'re not sure. ',
+                      'What is your estimated total deductions? Use the advanced tool if you\'re not sure. ',
                   labelText:
-                  'Estimated total deduction (if you\'re not sure, and live in NY, click the + button '),
+                      'Estimated total deduction (if you\'re not sure, and live in NY, click the + button '),
               onChanged: (String inputtedDeduction) {
                 setState(() {
                   widget.model.yourDeduction = double.parse(inputtedDeduction);
@@ -1124,17 +1133,17 @@ Government sponsored program payments
               },
               validator: (String inputtedDeduction) {
                 return (inputtedDeduction.contains(new RegExp(r'[A-Z]')) ||
-                    inputtedDeduction.contains(new RegExp(r'[a-z]')) ||
-                    (inputtedDeduction == null &&
-                        double.tryParse(inputtedDeduction) == null))
+                        inputtedDeduction.contains(new RegExp(r'[a-z]')) ||
+                        (inputtedDeduction == null &&
+                            double.tryParse(inputtedDeduction) == null))
                     ? 'Only use numbers.'
                     : null;
               },
               autovalidateMode: AutovalidateMode.always,
             ),
             new Text("Your max benefit: " + widget.model.yourMax.toString()),
-            new Text(
-                "Your estimated benefit: " + widget.model.yourBenefit.toString()),
+            new Text("Your estimated benefit: " +
+                widget.model.yourBenefit.toString()),
             new RaisedButton(
               child: const Text('Show Calculation Steps'),
               color: Theme.of(context).accentColor,
@@ -1144,8 +1153,7 @@ Government sponsored program payments
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      _buildAboutDialog(context),
+                  builder: (BuildContext context) => _buildAboutDialog(context),
                 );
                 // Perform some action
               },
