@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snapp/resources.dart';
-import 'package:snapp/updates.dart';
+//import 'package:snapp/updates.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'home.dart';
@@ -563,15 +563,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         ),
       ),
       Resources(),
-      Updates(),
-      // Container(
-      //   //padding: EdgeInsets.all(10.0),
-      //   child: Column(
-      //     children: <Widget>[
-      //       Text('this is updates stuff'),
-      //     ],
-      //   ),
-      // ),
+      // Updates(),
     ];
 
     return Scaffold(
@@ -595,10 +587,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             icon: Icon(Icons.info),
             label: 'Resources',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.remove_red_eye),
-            label: 'Updates',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.remove_red_eye),
+          //   label: 'Updates',
+          // ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
