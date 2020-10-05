@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.snapp">
-   <application
-        android:label="snapp"
+    package="com.snaptools.app">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:label="SNAP ToolCenter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

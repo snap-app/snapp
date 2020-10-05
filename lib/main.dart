@@ -191,7 +191,6 @@ class Calculator {
     double dependentCare,
     double earnedIncome,
   ) {
-    //TODO: Put all the values in. Read the literature to know what it means/what bearing it has on the calculator.
     if (householdSize == 1) return 0;
     return 0;
   }
