@@ -60,7 +60,7 @@ class HomeState extends State<Home> {
               ),
             ),
             Text(
-                "\n\nDo your best to fill out these questions. None of your info is saved anywhere else. If you don't know the exact answer, try to estimate or you can leave the field blank."),
+                "\n\nThis estimator was last updated on 10/5 to take into account the SNAP 2021 fiscal year COLA adjustments.\n\nDo your best to fill out these questions. None of your info is saved anywhere else. If you don't know the exact answer, try to estimate or you can leave the field blank."),
             Text("\n \nFirst, your maximum possible benefit (\$" +
                 widget.model.yourMax.toString() +
                 ") is calculated based on your household size. You can be a separate filing group even if you live with family or other people, as long as you purchase and prepare food separately. Individuals can only receive FS as a member of one household per month. \n"),
@@ -77,6 +77,7 @@ Interest
 Royalties
 Government sponsored program payments
 
+Earned and unearned income constitutes the total countable income before any deductions, such as taxes, insurance, garnishments, etc.
             \n"""),
             Text(
                 "Next, a series of deduction and exclusions are applied, calculated from a variety of factors in this process:\n"),
@@ -91,7 +92,7 @@ Government sponsored program payments
                 ") is again deducted.\n"),
             Text("4. All actual dependent care costs (\$" +
                 widget.model.yourDependentCareCosts.toString() +
-                "), or expenses for the care of children under 18 years or incapacitated of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age.\n"),
+                "), or expenses for the care of children under 18 years or incapacitated of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted-- and it is only applicable if it is necessary to allow a household member to accept a job, work, attend training or education, comply with work requirements, or look for work. The limit of this deduction is 200 for dependents under 2 years of age, and 175 for dependents above 2 years of age.\n"),
             Text(
                 "5. If you are homeless, a deduction of \$152.06 is applied.\n"),
             Text(

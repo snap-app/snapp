@@ -60,21 +60,21 @@ class Calculator {
 
   static double getMaxBenefit(int householdSize) {
     if (householdSize >= 8) {
-      return (1164 + (householdSize - 8.0) * 146);
+      return (1224 + (householdSize - 8.0) * 153);
     } else if (householdSize == 7) {
-      return 1018;
+      return 1071;
     } else if (householdSize == 6) {
-      return 921;
+      return 969;
     } else if (householdSize == 5) {
-      return 768;
+      return 807;
     } else if (householdSize == 4) {
-      return 646;
+      return 680;
     } else if (householdSize == 3) {
-      return 509;
+      return 535;
     } else if (householdSize == 2) {
-      return 355;
+      return 374;
     } else if (householdSize == 1) {
-      return 194;
+      return 204;
     } else
       return 0;
   }
@@ -95,17 +95,17 @@ class Calculator {
 
   static double getStandardDeduction(int familySize) {
     if (familySize <= 3) return 167;
-    if (familySize == 4) return 178;
-    if (familySize == 5) return 209;
+    if (familySize == 4) return 181;
+    if (familySize == 5) return 212;
     if (familySize >= 6)
-      return 240;
+      return 243;
     else
       return 0;
   }
 
   static double getHomelessDeduction(bool homelessness) {
     if (homelessness) {
-      return 152.06;
+      return 156.74;
     } else {
       return 0;
     }
