@@ -116,7 +116,7 @@ k. A recipient of interim assistance benefits pending the receipt of Supplementa
               ],
             ),
             Text(
-                """\nThen, you determine your monthly gross income, a combination of your earned and unearned income."""),
+                """\nThen, you determine your monthly gross income, a combination of your earned and unearned income.\n"""),
             ExpansionTile(
               title:
                   Column(children: <Widget>[Text('What is unearned income?')]),
@@ -151,7 +151,7 @@ Earned and unearned income constitutes the total countable income before any ded
                 ") is again deducted.\n"),
             Text("4. All actual dependent care costs (\$" +
                 widget.model.yourDependentCareCosts.toString() +
-                "), or expenses for the care of children under 18 years or incapacitated of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted-- and it is only applicable if it is necessary to allow a household member to accept a job, work, attend training or education, comply with work requirements, or look for work. \n"),
+                "), or expenses for the care of children under 18 years or incapacitated household members of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted-- and it is only applicable if it is necessary to allow a household member to accept a job, work, attend training or education, comply with work requirements, or look for work. \n"),
             Text(
                 "5. If you are homeless, a deduction of \$156.74 is applied.\n"),
             Text(
@@ -305,7 +305,7 @@ receives interim assistance benefits pending the receipt of Supplemental Securit
               ],
             ),
             Text(
-                """\nThen, you determine your monthly gross income, a combination of your earned and unearned income."""),
+                """\nThen, you determine your monthly gross income, a combination of your earned and unearned income.\n"""),
             ExpansionTile(
               title:
                   Column(children: <Widget>[Text('What is unearned income?')]),
@@ -340,7 +340,7 @@ Earned and unearned income constitutes the total countable income before any ded
                 ") is again deducted.\n"),
             Text("4. All actual dependent care costs (\$" +
                 widget.model.yourDependentCareCosts.toString() +
-                "), or expenses for the care of children under 18 years or incapacitated of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted-- and it is only applicable if it is necessary to allow a household member to accept a job, work, attend training or education, comply with work requirements, or look for work. \n"),
+                "), or expenses for the care of children under 18 years or incapacitated household members of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted-- and it is only applicable if it is necessary to allow a household member to accept a job, work, attend training or education, comply with work requirements, or look for work. \n"),
             Text(
                 "5. If you are homeless, a deduction of \$156.74 is applied.\n"),
             Text(
@@ -396,7 +396,6 @@ Earned and unearned income constitutes the total countable income before any ded
     );
   }
 
-  
   showDisclaimer(BuildContext context, {BuildContext popupContext}) {
     Navigator.push(
         context,
@@ -564,7 +563,7 @@ Earned and unearned income constitutes the total countable income before any ded
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                             Text(
-                                "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs or inaccuracies please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York done-- more to come soon) "),
+                                "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs or inaccuracies please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York and Connecticut done-- more to come soon) "),
                             DropdownButton<String>(
                               value: dropdownValue,
                               icon: Icon(Icons.arrow_downward),
@@ -632,7 +631,7 @@ Earned and unearned income constitutes the total countable income before any ded
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Text(
-                                "Questions? \nHit show calculation at bottom for clarification and help."),
+                                "Questions? \nHit show calculation at bottom for clarification and help.\n"),
                             TextFormField(
                               decoration: InputDecoration(
                                   icon: Icon(Icons.person),
@@ -875,10 +874,9 @@ Earned and unearned income constitutes the total countable income before any ded
                                 icon: Icon(Icons.child_friendly),
                                 border: InputBorder.none,
                                 hintText:
-                                    'Dependent care (for children under 18 or disabled household members of any age ',
-                                labelText:
-                                    'Dependent care costs (for children under 18 or disabled household members of any age)',
-                                labelStyle: TextStyle(fontSize: 8),
+                                    'Care for children under 18 or disabled household members of any age ',
+                                labelText: 'Dependent care costs',
+                                labelStyle: TextStyle(fontSize: 15),
                               ),
                               onChanged: (String inputtedCare) {
                                 if (!(inputtedCare
@@ -1180,7 +1178,7 @@ Earned and unearned income constitutes the total countable income before any ded
                               autovalidateMode: AutovalidateMode.always,
                             ),
                             new RaisedButton(
-                              child: const Text('Update Benefit'),
+                              child: const Text('Manually Update Benefit'),
                               color: Theme.of(context).accentColor,
                               elevation: 4.0,
                               splashColor: Colors.amberAccent,
@@ -1189,6 +1187,10 @@ Earned and unearned income constitutes the total countable income before any ded
                                 widget.model.updateNYBenefit();
                                 // Perform some action
                               },
+                            ),
+                            Text(
+                              '(updates happen automatically after every change)',
+                              style: TextStyle(fontSize: 8),
                             ),
                             new RaisedButton(
                               child:
@@ -1246,7 +1248,7 @@ Earned and unearned income constitutes the total countable income before any ded
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Text(
-                                "Questions? \nHit show calculation at bottom for clarification and help."),
+                                "Questions? \nHit show calculation at bottom for clarification and help.\n"),
                             TextFormField(
                               decoration: InputDecoration(
                                   icon: Icon(Icons.person),
@@ -1489,10 +1491,9 @@ Earned and unearned income constitutes the total countable income before any ded
                                 icon: Icon(Icons.child_friendly),
                                 border: InputBorder.none,
                                 hintText:
-                                    'Dependent care (for children under 18 or disabled household members of any age ',
-                                labelText:
-                                    'Dependent care costs (for children under 18 or disabled household members of any age)',
-                                labelStyle: TextStyle(fontSize: 8),
+                                    'Care for children under 18 or disabled household members of any age ',
+                                labelText: 'Dependent care costs',
+                                labelStyle: TextStyle(fontSize: 15),
                               ),
                               onChanged: (String inputtedCare) {
                                 if (!(inputtedCare
@@ -1774,7 +1775,7 @@ Earned and unearned income constitutes the total countable income before any ded
                               autovalidateMode: AutovalidateMode.always,
                             ),
                             new RaisedButton(
-                              child: const Text('Update Benefit'),
+                              child: const Text('Manually Update Benefit'),
                               color: Theme.of(context).accentColor,
                               elevation: 4.0,
                               splashColor: Colors.amberAccent,
@@ -1783,6 +1784,10 @@ Earned and unearned income constitutes the total countable income before any ded
                                 widget.model.updateCTBenefit();
                                 // Perform some action
                               },
+                            ),
+                            Text(
+                              '(updates happen automatically after every change)',
+                              style: TextStyle(fontSize: 8),
                             ),
                             new RaisedButton(
                               child:
