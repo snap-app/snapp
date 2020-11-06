@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:snapp/resources.dart';
 //import 'package:snapp/updates.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 import 'home.dart';
 
 void main() => runApp(MyApp());
@@ -635,6 +636,7 @@ class _PopupContentState extends State<PopupContent> {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  final keyIsFirstLoaded = 'is_first_loaded';
   static Model model = new Model();
   String yourMaximumTextHolder =
       'Your household\'s maximum benefit would be: ' + model.yourMax.toString();
@@ -662,8 +664,50 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
+  showDialogIfFirstLoaded(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstLoaded = prefs.getBool(keyIsFirstLoaded);
+    if (isFirstLoaded == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Estimator Disclaimer"),
+            content: Container(
+              padding: EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    new Text(
+                        "The SNAPP Benefits Calculator should be used for screening purposes only. \n\nThe laws, regulations, rules and policies the calculator is based on are subject to change. \n\nWe make no representations or warranties, express or implied, as to the accuracy of the projected results. \n\nWe are not liable for any decision made or action taken by anyone in reliance upon the information obtained from this calculator. \n\nThe calculator is not endorsed by the public entities that administer the SNAP program and individuals who want to apply for SNAP benefits should submit an application to the government agency where official determinations are made. \n\nIf you are unsure about eligibility, don't hesitate to receive an official determination. There are many deductions and ways to calculate them, and you may be eligible for other benefits."),
+                    new Text(
+                        "There are also other disqualifying factors like immigration status, the gross monthly income test, SNAP limits for unemployed, childless adults, and asset thresholds that aren't otherwise used to calculate your benefit, so those factors are also not taken into account by this calculator. Only a caseworker can decide eligibility and give you the exact benefit amount."),
+                  ],
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Dismiss"),
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                  prefs.setBool(keyIsFirstLoaded, false);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () => showDialogIfFirstLoaded(context));
     List<Widget> _widgetOptions = [
       Home(
         model: model,

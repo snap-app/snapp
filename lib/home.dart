@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snapp/main.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+//import 'dart:async';
 
 class Home extends StatefulWidget {
   final Model model;
@@ -68,24 +70,13 @@ class HomeState extends State<Home> {
               title: Column(
                   children: <Widget>[Text('What is a household member?')]),
               children: <Widget>[
-                Text(
-                    """(From CT SNAP Policy Manual) The program asks for the size of your household filing group, or Eligibility Determination Group. Even if you live with family or other people, you can be a separate filing group if you purchase and prepare food separately. Individuals can only receive FS as a member of one household per month. Some relationship rules to EDGs extend to spouses, parents and children, minors under parent control, and foster children and adults:
+                Text("""From page 48 of NY SNAP Policy Handbook
+HOUSEHOLD COMPOSITION - Household composition is based primarily on food units. A food unit consists of individuals customarily purchasing food and preparing meals together for home consumption. Local districts shall generally accept a household's statement as to which individuals residing with the household are members. 
 
-Individuals legally married and living together must be in the same EDG. 
+NOTE: A person cannot participate as a member of more than one household at a time unless the person is a resident of a shelter for battered women and children (as defined in FSSB Section 5) and was a member of a household containing the person who has abused him or her. 
 
-Children include natural, step and adopted children.
-Parents and their children 21 years of age and younger who live together must be in the same EDG even if the children have their own spouse or child who lives in the same household.
- 
-If the child under joint physical custody lives with one parent more than 50% of the time, the child is included in that parent’s household.
-Children under joint physical custody spending an equal amount of time in each household during a month are included in the EDG:
-the parents have agreed upon, or 
-the EDG that applies first.  
- 
-A minor is an individual under 18 years of age. A minor who lives with, and is under the parental control of an adult, must be in the adult’s EDG, even if the adult is not the minor’s parent.
- 
-Parental control means the minor is dependent on the adult for financial or other support. 
- 
-The household may choose to include or exclude a foster child or foster adult who lives with them. If excluded, the foster child or adult is not eligible as a separate EDG, and the foster care payment is not income to the household.
+A household is composed of any of the following individuals or groups of individuals: • An individual living alone, • An individual living with others but customarily purchasing food and preparing meals for home consumption separate and apart from others, or • A group of individuals who live together and customarily purchase food and prepare meals together for home consumption
+
  """),
               ],
             ),
@@ -95,27 +86,37 @@ The household may choose to include or exclude a foster child or foster adult wh
                     'Is one or more of my household members elderly or disabled?')
               ]),
               children: <Widget>[
-                Text("""(From CT SNAP Policy Manual)
-Elderly - Individuals 60 years of age or older at the end of the month for which benefits are being determined.
+                Text("""From page 56 of NY SNAP Policy Handbook
+1. An elderly member is one who is 60 years of age or older. 
 
-An individual who meets one or more of the following:
-Receives disability or blindness benefits from any of these programs: Social Security, Supplemental Security Income (SSI), Medicaid, or SSI-related Medicaid.
-Receives a federally or state administered SSI supplement based on disability or blindness, or section 212(a) of PL 93-66.
-Receives a disability retirement benefit from a government agency for a disability considered permanent by SSA.
-Is a veteran the VA considers totally disabled or permanently housebound or in need of regular aid and attendance.
-Is a veteran’s surviving spouse who the VA considers:
-in need of regular aid and attendance,
-permanently housebound, or
-approved for benefits because of the veteran’s death and has a disability considered permanent by SSA.
-Is a veteran’s surviving child who the VA considers:
-incapable of self-support, or
-approved for benefits because of the veteran’s death and has a disability considered permanent by SSA
-receives interim assistance benefits pending the receipt of Supplemental Security Income, receives disability related medical assistance under title XIX of the Social Security Act, or receives disability-based State general assistance (SAGA) benefits provided that the eligibility to receive any of these benefits is based upon disability or blindness criteria established by the State agency which are at least as stringent as those used under title XVI of the Social Security Act.
+2. A disabled member is one who is: 
+
+a. Receiving Supplemental Security Income (SSI) benefits under Title XVI of the Social Security Act or disability or blindness payments under Titles I, II, X, XIV, or XVI of the Social Security Act, 
+
+b. A veteran with a service-connected or non-service connected disability rated or paid as total (100%) by the Veteran's Administration (VA) or is considered by the VA to be in need of regular aid and attendance or permanently housebound, 
+
+c. A surviving spouse of a veteran and considered by the VA to be in need of regular aid and attendance or permanently housebound, 
+
+d. A surviving child of a veteran and considered by the VA to be permanently incapable of self-support, 
+
+e. A surviving spouse or child of a veteran and entitled to compensation for a service-connected death or pension benefits for a non-service connected death based on a VA determination and has a disability considered permanent under the Social Security Act. "Entitled" in this definition refers to those veterans' surviving spouses and children who are receiving the benefits stated above or have been approved for such payment. For disabilities that are considered permanent see FSSB Section 18. 
+
+f. Receiving Federal- or State-administered supplemental benefits under section 1616(a) of the Social Security Act provided that the eligibility to receive the benefits is based upon the disability or blindness criteria used under title XVI of the Social Security Act. 
+
+g. Receiving Federal- or State-administered supplemental benefits under section 212(a) of Public Law 93- 66, 
+
+h. Receiving a Federal, State or Local government disability retirement pension because of a disability considered permanent under Section 221(i) of the Social Security Act. This includes individuals receiving payments under the Federal Employment Compensation Act (FECA). Individuals receiving FECA payments are considered permanently disabled under section 221(i) of the Social Security Act if the payments are made to a person in lieu of Civil Service Retirement (CSR) benefits. Persons receiving FECA payments pending a determination of eligibility for CSR may not be considered disabled under this provision. Only those who can document that they have elected to receive FECA payments in lieu of CSR benefits satisfy the requirements of this provision. NOTE: Employees injured on the job who receive temporary FECA payments while they recover are not considered permanently disabled under this provision. 
+
+i. Receiving an annuity under: (1) Section 2(a)(1)(v) of the Railroad Retirement Act of 1974 and is determined to be disabled based upon the criteria used under Title XVI of the Social Security Act; or (2) Section 2(a)(1)(iv) of the Railroad Retirement Act of 1974 and is determined to qualify for Medicare by the Railroad Retirement Board; or 
+
+j. Receiving authorization of Medical Assistance (MA) based upon disability or blindness. In New York State, such medical assistance recipients are those who have been certified by Medical Assistance as blind, disabled or "SSI-related", pursuant to Title XVI. The following is a link to what disabilities are classified as permanent under the Social Security Act: http://www.ssa.gov/disability/professionals/bluebook/listing-impairments.htm 
+
+k. A recipient of interim assistance benefits pending the receipt of Supplemental Security Income (SSI),
 """),
               ],
             ),
             Text(
-                """Then, you determine your monthly gross income, a combination of your earned and unearned income."""),
+                """\nThen, you determine your monthly gross income, a combination of your earned and unearned income."""),
             ExpansionTile(
               title:
                   Column(children: <Widget>[Text('What is unearned income?')]),
@@ -257,11 +258,54 @@ Earned and unearned income constitutes the total countable income before any ded
               title: Column(
                   children: <Widget>[Text('What is a household member?')]),
               children: <Widget>[
-                Text(""" """),
+                Text(
+                    """(From CT SNAP Policy Manual) The program asks for the size of your household filing group, or Eligibility Determination Group. Even if you live with family or other people, you can be a separate filing group if you purchase and prepare food separately. Individuals can only receive FS as a member of one household per month. Some relationship rules to EDGs extend to spouses, parents and children, minors under parent control, and foster children and adults:
+
+Individuals legally married and living together must be in the same EDG. 
+
+Children include natural, step and adopted children.
+Parents and their children 21 years of age and younger who live together must be in the same EDG even if the children have their own spouse or child who lives in the same household.
+ 
+If the child under joint physical custody lives with one parent more than 50% of the time, the child is included in that parent’s household.
+Children under joint physical custody spending an equal amount of time in each household during a month are included in the EDG:
+the parents have agreed upon, or 
+the EDG that applies first.  
+ 
+A minor is an individual under 18 years of age. A minor who lives with, and is under the parental control of an adult, must be in the adult’s EDG, even if the adult is not the minor’s parent.
+ 
+Parental control means the minor is dependent on the adult for financial or other support. 
+ 
+The household may choose to include or exclude a foster child or foster adult who lives with them. If excluded, the foster child or adult is not eligible as a separate EDG, and the foster care payment is not income to the household.
+                 """),
+              ],
+            ),
+            ExpansionTile(
+              title: Column(children: <Widget>[
+                Text(
+                    'Is one or more of my household members elderly or disabled?')
+              ]),
+              children: <Widget>[
+                Text("""(From CT SNAP Policy Manual)
+Elderly - Individuals 60 years of age or older at the end of the month for which benefits are being determined.
+
+An individual who meets one or more of the following:
+Receives disability or blindness benefits from any of these programs: Social Security, Supplemental Security Income (SSI), Medicaid, or SSI-related Medicaid.
+Receives a federally or state administered SSI supplement based on disability or blindness, or section 212(a) of PL 93-66.
+Receives a disability retirement benefit from a government agency for a disability considered permanent by SSA.
+Is a veteran the VA considers totally disabled or permanently housebound or in need of regular aid and attendance.
+Is a veteran’s surviving spouse who the VA considers:
+in need of regular aid and attendance,
+permanently housebound, or
+approved for benefits because of the veteran’s death and has a disability considered permanent by SSA.
+Is a veteran’s surviving child who the VA considers:
+incapable of self-support, or
+approved for benefits because of the veteran’s death and has a disability considered permanent by SSA
+receives interim assistance benefits pending the receipt of Supplemental Security Income, receives disability related medical assistance under title XIX of the Social Security Act, or receives disability-based State general assistance (SAGA) benefits provided that the eligibility to receive any of these benefits is based upon disability or blindness criteria established by the State agency which are at least as stringent as those used under title XVI of the Social Security Act.
+"""),
               ],
             ),
             Text(
-                """Then, you determine your monthly gross income, a combination of your earned and unearned income."""),
+                """\nThen, you determine your monthly gross income, a combination of your earned and unearned income."""),
             ExpansionTile(
               title:
                   Column(children: <Widget>[Text('What is unearned income?')]),
@@ -352,6 +396,7 @@ Earned and unearned income constitutes the total countable income before any ded
     );
   }
 
+  
   showDisclaimer(BuildContext context, {BuildContext popupContext}) {
     Navigator.push(
         context,
@@ -363,7 +408,7 @@ Earned and unearned income constitutes the total countable income before any ded
             child: StatefulBuilder(builder: (context, setState) {
               return Scaffold(
                   appBar: AppBar(
-                    title: Text('Calculator Disclaimer'),
+                    title: Text('Estimator Disclaimer'),
                     leading: new Builder(builder: (context) {
                       return IconButton(
                         icon: Icon(Icons.arrow_back),
