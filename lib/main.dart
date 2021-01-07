@@ -32,6 +32,7 @@ class Calculator {
   double yourShelterExcess;
   double yourNetIncome;
   double yourNYBenefit;
+  double yourEmergencyBenefit;
 
   Calculator() {
     yourHouseholdSize = 0;
@@ -57,6 +58,7 @@ class Calculator {
     yourShelterExcess = 0;
     yourNetIncome = 0;
     yourNYBenefit = 0;
+    yourEmergencyBenefit = 0;
   }
 
   static double getMaxBenefit(int householdSize) {
@@ -78,6 +80,10 @@ class Calculator {
       return 204;
     } else
       return 0;
+  }
+
+  static double getEmergencyMaxBenefit(double maxBenefit) {
+    return maxBenefit * 1.15;
   }
 
   static double threeInputCalc(
@@ -173,6 +179,20 @@ class Calculator {
     return 27;
   }
 
+  static double getStandardUtilityAllowancesNJ(String level) {
+    if (level ==
+        "I have heating and cooling costs. (Doesn't matter if they are partially or fully covered by HEAP)") {
+      return 548;
+    }
+    if (level == "I have utility costs.") {
+      return 338;
+    }
+    if (level == "I have neither.") {
+      return 29;
+    }
+    return 29;
+  }
+
   static double getStandardUtilityAllowanacesNewYorkArea(String area) {
     if (area == 'New York City') {
       return 800.0 + 316 + 30;
@@ -211,7 +231,7 @@ class Calculator {
   }
 
   static double getShelterExcessNewYork(
-      //TODO: for now ct assumed same shelter excess calculation, (besides SUA), check to make sure
+      //TODO: for now ct and NJ assumed same shelter excess calculation, (besides SUA), check to make sure
       double adjustedIncome,
       double rentOrMortgage,
       double standardUtilityAllowance,
@@ -286,8 +306,9 @@ class Calculator {
     if (homelessnessStatus) shelterExcess = 0;
 
     double netIncome = adjustedIncome - shelterExcess;
-
-    double absoluteBenefit = getMaxBenefit(householdSize) - netIncome * .3;
+    double maxBenefit = getMaxBenefit(householdSize);
+    maxBenefit = getEmergencyMaxBenefit(maxBenefit);
+    double absoluteBenefit = maxBenefit - netIncome * .3;
     if (absoluteBenefit <= 0) {
       return [
         0,
@@ -297,9 +318,9 @@ class Calculator {
         shelterExcess,
         standardUtilityAllowance
       ];
-    } else if (absoluteBenefit >= getMaxBenefit(householdSize)) {
+    } else if (absoluteBenefit >= maxBenefit) {
       return [
-        getMaxBenefit(householdSize),
+        maxBenefit,
         adjustedIncome,
         standardDeduction,
         netIncome,
@@ -367,8 +388,9 @@ class Calculator {
     if (homelessnessStatus) shelterExcess = 0;
 
     double netIncome = adjustedIncome - shelterExcess;
-
-    double absoluteBenefit = getMaxBenefit(householdSize) - netIncome * .3;
+    double maxBenefit = getMaxBenefit(householdSize);
+    maxBenefit = getEmergencyMaxBenefit(maxBenefit);
+    double absoluteBenefit = maxBenefit - netIncome * .3;
     if (absoluteBenefit <= 0) {
       return [
         0,
@@ -378,9 +400,91 @@ class Calculator {
         shelterExcess,
         standardUtilityAllowance
       ];
-    } else if (absoluteBenefit >= getMaxBenefit(householdSize)) {
+    } else if (absoluteBenefit >= maxBenefit) {
       return [
-        getMaxBenefit(householdSize),
+        maxBenefit,
+        adjustedIncome,
+        standardDeduction,
+        netIncome,
+        shelterExcess,
+        standardUtilityAllowance
+      ];
+    } else
+      return [
+        absoluteBenefit,
+        adjustedIncome,
+        standardDeduction,
+        netIncome,
+        shelterExcess,
+        standardUtilityAllowance
+      ];
+  }
+
+  static List<double> advancedDeductionCalculationNJ(
+      double unearnedIncome,
+      double earnedIncome,
+      double childSupport,
+      int householdSize,
+      double dependentCare,
+      int dependentAge,
+      bool homelessnessStatus,
+      double medicalExpenses,
+      double rentOrMortgage,
+      String location,
+      String utilityAllowanceLevel,
+      double otherShelter,
+      bool disabledOrElderly) {
+    double grossIncome = unearnedIncome + earnedIncome;
+
+    double adjustedGrossIncome = grossIncome - childSupport;
+
+    double earnedIncomeDeduction = earnedIncome * .2;
+
+    double standardDeduction = getStandardDeduction(householdSize);
+
+    double dependentCareDeduction = dependentCare;
+
+    double homelessDeduction = getHomelessDeduction(homelessnessStatus);
+
+    double medicalDeduction = getAdjustedMedicalDeduction(medicalExpenses);
+
+    double totalDeduction = earnedIncomeDeduction +
+        standardDeduction +
+        dependentCareDeduction +
+        homelessDeduction +
+        medicalDeduction;
+
+    double adjustedIncome = adjustedGrossIncome - totalDeduction;
+    if (adjustedIncome <= 0) adjustedIncome = 0;
+
+    double standardUtilityAllowance =
+        getStandardUtilityAllowancesNJ(utilityAllowanceLevel);
+
+    double shelterExcess = getShelterExcessNewYork(
+        adjustedIncome,
+        rentOrMortgage,
+        getStandardUtilityAllowancesNJ(utilityAllowanceLevel),
+        otherShelter,
+        disabledOrElderly);
+
+    if (homelessnessStatus) shelterExcess = 0;
+
+    double netIncome = adjustedIncome - shelterExcess;
+    double maxBenefit = getMaxBenefit(householdSize);
+    maxBenefit = getEmergencyMaxBenefit(maxBenefit);
+    double absoluteBenefit = maxBenefit - netIncome * .3;
+    if (absoluteBenefit <= 0) {
+      return [
+        0,
+        adjustedIncome,
+        standardDeduction,
+        netIncome,
+        shelterExcess,
+        standardUtilityAllowance
+      ];
+    } else if (absoluteBenefit >= maxBenefit) {
+      return [
+        maxBenefit,
         adjustedIncome,
         standardDeduction,
         netIncome,
@@ -445,6 +549,7 @@ class Model {
   double yourNetIncome;
   double yourNYBenefit;
   double yourCTBenefit;
+  double yourNJBenefit;
 
   Model() {
     this.calculator = calculator;
@@ -506,7 +611,7 @@ class Model {
   }
 
   updateCTBenefit() {
-    List<double> yourNYData = Calculator.advancedDeductionCalculationCT(
+    List<double> yourCTData = Calculator.advancedDeductionCalculationCT(
         yourUnearnedIncome,
         yourEarnedIncome,
         yourChildSupport,
@@ -520,12 +625,35 @@ class Model {
         yourStandardUtilityAllowanceLevel,
         yourOtherShelterCosts,
         disabledOrElderly);
-    yourCTBenefit = yourNYData[0];
-    yourAdjustedIncome = yourNYData[1];
-    yourStandardDeduction = yourNYData[2];
-    yourNetIncome = yourNYData[3];
-    yourShelterExcess = yourNYData[4];
-    yourStandardUtilityAllowance = yourNYData[5];
+    yourCTBenefit = yourCTData[0];
+    yourAdjustedIncome = yourCTData[1];
+    yourStandardDeduction = yourCTData[2];
+    yourNetIncome = yourCTData[3];
+    yourShelterExcess = yourCTData[4];
+    yourStandardUtilityAllowance = yourCTData[5];
+  }
+
+  updateNJBenefit() {
+    List<double> yourNJData = Calculator.advancedDeductionCalculationNJ(
+        yourUnearnedIncome,
+        yourEarnedIncome,
+        yourChildSupport,
+        yourHouseholdSize,
+        yourDependentCareCosts,
+        yourDependentAge,
+        yourHomelessnessStatus,
+        yourMedicalExpenses,
+        yourRentOrMortgage,
+        yourArea,
+        yourStandardUtilityAllowanceLevel,
+        yourOtherShelterCosts,
+        disabledOrElderly);
+    yourCTBenefit = yourNJData[0];
+    yourAdjustedIncome = yourNJData[1];
+    yourStandardDeduction = yourNJData[2];
+    yourNetIncome = yourNJData[3];
+    yourShelterExcess = yourNJData[4];
+    yourStandardUtilityAllowance = yourNJData[5];
   }
 }
 

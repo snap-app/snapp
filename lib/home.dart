@@ -121,8 +121,9 @@ k. A recipient of interim assistance benefits pending the receipt of Supplementa
               title:
                   Column(children: <Widget>[Text('What is unearned income?')]),
               children: <Widget>[
-                Text(
-                    """Unearned income is passive income including, but not limited to: 
+                Text("""
+Pandemic UI payments are no longer counted towards unearned income.
+Unearned income is passive income including, but not limited to: 
 
 Assistance payments
 Annuities, pensions, retirement, veterans’ or disability benefits, workers’ or unemployment compensation
@@ -192,6 +193,24 @@ Earned and unearned income constitutes the total countable income before any ded
                 ". That leaves a final estimated monthly benefit of \$" +
                 widget.model.yourNYBenefit.toString() +
                 "."),
+            ExpansionTile(
+              title: Column(children: <Widget>[
+                Text('Additional flexibilities and NY state waivers:')
+              ]),
+              children: <Widget>[
+                Text("""
+                    \nFNS Page (many nationwide waivers in the middle of page): https://www.fns.usda.gov/disaster/pandemic/covid-19/new-york#snap 
+                    
+                    Application processing changes:
+                      - Certification periods extended
+                      - Periodic reporting waived
+                      - Interview requirements changed:
+                        - face-to-face interviews waived
+                        - initial and recertification interviews waived
+                        - expedited service interviews postponed  
+                    """),
+              ],
+            ),
             Text(
                 "\n\nTo see where we researched the calculations and deductions, and more, look in the Resources tab.")
           ],
@@ -210,7 +229,7 @@ Earned and unearned income constitutes the total countable income before any ded
   }
 
   Widget _buildAboutAdvancedCT(BuildContext context) {
-    widget.model.updateNYBenefit();
+    widget.model.updateCTBenefit();
     return new AlertDialog(
       title: const Text('CT Full Calculation:'),
       content: new SingleChildScrollView(
@@ -310,8 +329,9 @@ receives interim assistance benefits pending the receipt of Supplemental Securit
               title:
                   Column(children: <Widget>[Text('What is unearned income?')]),
               children: <Widget>[
-                Text(
-                    """Unearned income is passive income including, but not limited to: 
+                Text("""
+Pandemic UI payments are no longer counted towards unearned income. 
+Unearned income is passive income including, but not limited to: 
 
 Assistance payments
 Annuities, pensions, retirement, veterans’ or disability benefits, workers’ or unemployment compensation
@@ -377,12 +397,312 @@ Earned and unearned income constitutes the total countable income before any ded
                 "). You are expected to put 30% of this figure towards food, which is subtracted from your maximum possible benefit of \$" +
                 widget.model.yourMax.toString() +
                 ". That leaves a final estimated monthly benefit of \$" +
-                widget.model.yourNYBenefit.toString() +
+                widget.model.yourCTBenefit.toString() +
                 "."),
+            ExpansionTile(
+              title: Column(children: <Widget>[
+                Text('Additional flexibilities and CT state waivers:')
+              ]),
+              children: <Widget>[
+                Text("""
+                    FNS Page (many nationwide waivers in the middle of page): https://www.fns.usda.gov/disaster/pandemic/covid-19/connecticut#snap 
+                    Pandemic EBT (for children enrolled in school meals programs): https://portal.ct.gov/DSS/SNAP/Pandemic-EBT
+                    """),
+              ],
+            ),
             Text(
                 "\n\nTo see where we researched the calculations and deductions, and more, look in the Resources tab.")
           ],
         ),
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAboutAdvancedNJ(BuildContext context) {
+    widget.model.updateNJBenefit();
+    return new AlertDialog(
+      title: const Text('NJ Full Calculation:'),
+      content: new SingleChildScrollView(
+        child: //StatefulBuilder(builder: (context, setState) {
+            Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              RichText(
+                text: new TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: new TextStyle(
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    new TextSpan(
+                        text: "Your maximum is: " +
+                            widget.model.yourMax.toString(),
+                        style: new TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              RichText(
+                text: new TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: new TextStyle(
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    new TextSpan(
+                        text: "Your estimated benefit is: " +
+                            widget.model.yourCTBenefit.toString(),
+                        style: new TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              Text(
+                  "\n\nThis estimator was last updated on 12/30 to take into account the 6 month 15% emergency increase in maximum SNAP benefits.\n\nDo your best to fill out these questions. None of your info is saved anywhere else. If you don't know the exact answer, try to estimate or you can leave the field blank."),
+              Text("\n \nFirst, your maximum possible benefit (\$" +
+                  widget.model.yourMax.toString() +
+                  ") is calculated based on your household size. You can be a separate filing group even if you live with family or other people, as long as you purchase and prepare food separately. Individuals can only receive FS as a member of one household per month. \n\nFrom January to June 2021, the maximum benefit is increased by 15%. This increase should appear in recipient accounts by January 23rd. \n"),
+              ExpansionTile(
+                title: Column(children: <Widget>[
+                  Text('What is a household/household member?')
+                ]),
+                children: <Widget>[
+                  Text("""
+Generally, household refers to an individual or a group that purchases and prepares food together. SNAP applications are made on behalf of this group, and all considerations of eligibility and benefits calculations will follow from it.
+"""),
+                  ExpansionTile(
+                    title: Column(children: <Widget>[
+                      Text('New Jersey full definition:')
+                    ]),
+                    children: <Widget>[
+                      Text(""" 
+From  10:87-2.2, CHAPTER 87. NEW JERSEY SUPPLEMENTAL NUTRITION ASSISTANCE PROGRAM (NJ SNAP) MANUAL, household is defined as the following (trimmed for readability): 
+
+A household may be composed of any of the following individuals or groups of individuals:
+
+1.Individual living alone;
+
+2.An individual living with others, but who customarily purchases food and prepares meals for home consumption separate and apart from others.
+i.Any person who has a disability that prevents him or her from purchasing or preparing his or her own food, but who has arranged to have his or her food purchased and prepared separate and apart from others in the household, may claim separate household status. Separate household status may be granted even if the person who shops for food or prepares meals for the disabled person is residing with the disabled person; 
+
+3.A group of individuals living together for whom food is purchased in common and for whom meals are prepared together for home consumption;
+
+4.An individual who is 60 years of age or older (and the spouse of such individual) living with others who is unable to purchase and prepare meals because he or she suffers from a disability considered permanent under the Social Security Act or suffers from some other physical or mental non disease-related, severe, permanent disability may be a separate household (see definition of elderly or disabled at N.J.A.C. 10:87- 2.34 and verification requirements at N.J.A.C. 10:87-2.19(i)). However, the gross monthly income of the household with which the individual resides cannot exceed the gross monthly income eligibility standard for the appropriate household size at N.J.A.C. 10:87-12.7...
+
+5.An applicant household that has customarily purchased and prepared food separately in the past but, because of changes in financial or other circumstances, is now temporarily buying and preparing food with others, shall be considered a separate household, providing it intends to return to its former status upon receipt of NJ SNAP benefits. The applicant household's statements on past and intended practices shall suffice, except when the information provided is questionable according to the criteria at N.J.A.C. 10:87-2.19(i). If the applicant household does not return to its former status, the actual household composition will prevail and will be considered a client-reportable change in accordance with N.J.A.C. 10:87-9.5(a) and (b). The 10-day period for reporting that the applicant household has not returned to its former status will commence upon receipt of NJ SNAP benefits.
+
+(b)
+Individuals or groups of individuals who are residents of an institution (except as otherwise specified in N.J.A.C. 10:87-2.4) or commercial boarding home, or boarders (except as specified in N.J.A.C. 10:87-2.3(b)) may not participate in the program. 
+
+(c)In no event shall nonhousehold member status or separate household status be granted to: 
+
+1.Parents and their biological, adopted or stepchildren (excluding foster children) under the age of 22 who reside together, regardless of the marital status or having a child of their own. The biological parent-child relationship takes precedence unless there has been a termination of parental rights. Legal custody does not in and of itself terminate parental rights, in which case the legal relationship between the biological parent and the child would still exist even though another person(s) has been awarded legal custody of the child... 
+
+2.A child (other than a foster child) under 18 years of age who lives with and is under parental control of a household member other than his or her parent. A child shall be considered to be under parental control for purposes of this provision if he or she is financially or otherwise dependent on a member of the household...
+
+3.A spouse of a member of the household. For the purposes of this Program, the term "spouse" shall include persons recognized by applicable State law as such and persons representing themselves as husband and wife to the community, relatives, friends, neighbors or trades people; or 
+
+4.Individuals who purchase and prepare meals together, with the following exceptions: 
+
+i.A household containing an elderly and disabled member who cannot purchase and prepare meals separately can be separated from the other household members, provided that the income of the other members does not exceed 165 percent of the Federal poverty level for the household size of the other members...
+
+ii.Foster individuals (N.J.A.C. 10:87-2.3(b)6) cannot be required to be included in the household if the household decides otherwise.
+
+(d)In cases of joint child custody, either parent may claim a child(ren) as a member of their NJ SNAP household, as long as the child(ren) resides in the home for some portion of the month. In the event that both parents are participating in the NJ SNAP program and both want to claim the child(ren) as a part of his or her household, the parent who has the child(ren) the greater part of the time shall be the parent to claim the child(ren) as a part of his or her NJ SNAP household. 1.If the child(ren) lives with each parent equally, the parent household that applies first shall be the one to add the child(ren) to his or her NJ SNAP household. 2.Under no circumstances shall duplicate participation occur. The child(ren) cannot be a part of two NJ SNAP households at the same time. 
+
+
+                    """),
+                    ],
+                  ),
+                ],
+              ),
+              ExpansionTile(
+                title: Column(children: <Widget>[
+                  Text(
+                      'Is one or more of my household members elderly or disabled?')
+                ]),
+                children: <Widget>[
+                  Text(
+                      """\nElderly generally refers to household members above 60 years of age, and disabled generally refers to household members with the inability to engage in any substantial gainful activity (SGA) by reason of any medically determinable physical or mental impairment(s) which can be expected to result in death or which has lasted or can be expected to last for a continuous period of not less than 12 months. The full definition follows:"""),
+                  ExpansionTile(
+                    title: Column(children: <Widget>[
+                      Text(
+                          'New Jersey Elderly or Disabled full determination:'),
+                    ]),
+                    children: <Widget>[
+                      Text("""(From CHAPTER 87. NEW JERSEY
+SUPPLEMENTAL NUTRITION ASSISTANCE PROGRAM (NJ SNAP) MANUAL > SUBCHAPTER 2.
+THE APPLICATION PROCESS) An elderly or disabled member of an NJ SNAP household is defined as a member who: 
+
+1.Is 60 years of age or older; 
+
+2.Receives supplemental security income benefits under Title XVI of the Social Security Act or disability or blindness payments under Titles I, II, X, XIV, or XVI of the Social Security Act; 
+
+3.Receives federally or State-administered supplemental benefits under section 1616(a) of the Social Security Act, provided that the eligibility to receive the benefits is based upon the disability or blindness criteria used under Title XVI of the Social Security Act; 
+
+4.Receives federally or State-administered supplemental benefits under section 212(a) of P.L. 93-66; 
+
+5.Receives disability retirement benefits from a governmental agency because of a disability considered permanent under section 221(i) of the Social Security Act; 
+
+6.Is a veteran with service-connected or non-service-connected disability rated by the Veteran's Administration (VA) as total or paid as total by the VA under Title 38 of the United States Code; 
+
+7.Is a veteran considered by the VA to be in need of regular aid and attendance or permanently housebound under Title 38 of the United States Code; 
+
+8.Is a surviving spouse of a veteran and considered by the DVA to be in need of regular aid and attendance or permanently housebound or a surviving child of a veteran and considered by the VA to be permanently incapable of self-support under Title 38 of the United States Code; 
+
+9.Is a surviving spouse or surviving child of a veteran and considered by the VA to be entitled to compensation for a service-connected death or pension benefits for a non service-connected death under Title 38 of the United States Code and has a disability considered permanent under section 221(i) of the Social Security Act.
+"Entitled" as used in this definition refers to those veterans' surviving spouses and surviving children who are receiving the compensation or pension benefits stated or have been approved for such payments, but are not yet receiving them; 
+
+10.Receives an annuity payment under section 2(a)(1)(iv) of the Railroad Retirement Act of 1974 and is determined to be eligible to receive Medicare by the Railroad Retirement Board; or section 2(a)(1)(v) of the Railroad Retirement Act of 1974 and is determined to be disabled, based upon the criteria used under Title XVI of the Social Security Act; or 
+
+11.Receives medical assistance benefits as a disabled individual under: 
+i.Medicaid Only (Aged, Blind, and Disabled); 
+
+ii.AIDS Community Care Alternatives Program; 
+
+iii.Community Care Program for the Elderly and Disabled; 
+
+iv.Model Waivers I, II, or III (Medicaid Community/Home Care Waivers); 
+
+v.Home Care Expansion Program; 
+
+vi.Medically-Needy Program; or vii.New Jersey Care Program
+"""),
+                    ],
+                  ),
+                ],
+              ),
+                  Text(
+                      """\nThen, you determine your monthly gross income, a combination of your earned and unearned income.\n"""),
+                  ExpansionTile(
+                    title: Column(
+                        children: <Widget>[Text('What is unearned income?')]),
+                    children: <Widget>[
+                      Text("""
+Pandemic UI payments are no longer counted as unearned income.
+Unearned income refers to passive income. 
+
+(From > CHAPTER 87. NEW JERSEY SUPPLEMENTAL NUTRITION ASSISTANCE PROGRAM (NJ SNAP) MANUAL > SUBCHAPTER 5. FINANCIAL ELIGIBILITY; INCOME)
+
+For the purposes of determining net NJ SNAP income, unearned income shall include, but not be limited to: 
+
+1.Assistance payments from Federal or Federally aided public assistance programs such as SSI or WFNJ/TANF and WFNJ/GA program payments, or other assistance programs based on need. Such assistance is considered to be unearned income even if provided in the form of a vendor payment to a third party on behalf of the household, unless specifically exempt as countable income under the provisions at N.J.A.C. 10:87-5.9(a)1 and 2. 
+i.All assistance payments from programs which require, as a condition of eligibility, the actual performance of work, without compensation other than the assistance payments themselves, shall be considered unearned income; 
+
+2.Annuities, pensions, retirement benefits, veteran's benefits, old-age, survivors, or disability benefits, workman's compensation, unemployment compensation, including any amount deducted to repay an IPV violation, Social Security benefits, strike benefits, and foster care payments for children or adults provided that the foster child or adult is included in the household; 
+
+3.Gross income (minus the cost of doing business) derived from rental property in which a household member is not actively engaged in management of the property at least 20 hours a week (see N.J.A.C. 10:87-5.4(a)3i); 
+
+4.Scholarships, educational grants, deferred payment loans for education, veteran's educational benefits and the like in excess of amounts excluded at N.J.A.C. 10:87- 5.9(a)7. Educational assistance with a work requirement is not considered unearned income; 
+
+5.Support and alimony payments made directly to the household from nonhousehold members. Non-recurring arrearages on child support and alimony payments made directly to the household are considered lump sum payments. Recurring court-ordered arrearages on child support and alimony payments made directly to the household are considered as unearned income; 
+
+6.Payments from Federal, State, or local government-sponsored programs which can be construed to be a gain or benefit; 
+
+7.Payments in the form of dividends, interest, and royalties; 
+
+8.Monies that are withdrawn or dividends that are or could be received by a household from trust funds. 
+i.Trust withdrawals shall be considered income in the month received unless excluded in accordance with N.J.A.C. 10:87-5.9. 
+ii.Dividends which the household has the option of either receiving as income or reinvesting in the trust are to be considered income in the month they become available to the household unless excluded in accordance with N.J.A.C. 10:87- 5.9; 
+
+9.All other direct money payments from any source which can be construed to be a gain or benefit to the household; 
+
+10.Income deemed to an alien age 18 or older from his or her sponsor in accordance with N.J.A.C. 10:87-7.11; and 
+
+11.Foster care payment received by the household for a foster care child whom the household has opted to include in the NJ SNAP household. 
+
+            \n"""),
+                    ],
+                  ),
+                  Text(
+                      "\nNext, a series of deduction and exclusions are applied, calculated from a variety of factors in this process:\n"),
+                  Text("1. Legally obligated child support expenses, direct and indirect, (\$" +
+                      widget.model.yourChildSupport.toString() +
+                      ") are deducted from your gross income. This does not include alimony or spousal support. Child support is an income exclusion, so this figure constitutes your adjusted gross income, which is used to perform a gross income test. The gross income test determines eligibility, but doesn't otherwise affect the calculation of your benefits.\nThis estimator does not perform the gross income test, but you can find it or ask your local officials about it using resources in the resources section.\n"),
+                  Text("2. 20% of earned income (\$" +
+                      (widget.model.yourEarnedIncome * .2).toString() +
+                      ") is further deducted.\n"),
+                  Text(
+                      "3. A standard deduction based on your household size (\$" +
+                          widget.model.yourStandardDeduction.toString() +
+                          ") is again deducted.\n"),
+                  Text("4. All actual dependent care costs (\$" +
+                      widget.model.yourDependentCareCosts.toString() +
+                      "), or expenses for the care of children under 18 years or incapacitated household members of any age, are deducted. Only unreimbursed costs for the dependent care itself is deducted-- and it is only applicable if it is necessary to allow a household member to accept a job, work, attend training or education, comply with work requirements, or look for work. \n"),
+                  Text(
+                      "5. If you are homeless, a deduction of \$156.74 is applied.\n"),
+                  Text(
+                      "6. Your medical expenses over \$35 a month ONLY for household members over 60 or disabled household members, that are not reimbursed by Title XVIII (Medicare) or XIX (Medicaid), (\$" +
+                          widget.model.yourMedicalExpenses.toString() +
+                          ") are deducted.\n"),
+                  Text("7. The deductions up to this point deducted from your gross income constitute your adjusted income (\$" +
+                      widget.model.yourAdjustedIncome.toString() +
+                      "). A shelter excess deduction may be applied. Its size and eligibility are determined as follows:"),
+                  Text("7a. Add up your rent/mortgage costs (\$" +
+                      widget.model.yourRentOrMortgage.toString() +
+                      "), your standard utility  allowance (\$" +
+                      widget.model.yourStandardUtilityAllowance.toString() +
+                      ") determined by your level of utility payments (" +
+                      widget.model.yourStandardUtilityAllowanceLevel +
+                      "), and your other shelter expenses (\$" +
+                      widget.model.yourOtherShelterCosts.toString() +
+                      ")"),
+                  Text("7b. Take your total shelter expenses (\$" +
+                      (widget.model.yourOtherShelterCosts +
+                              widget.model.yourRentOrMortgage +
+                              widget.model.yourStandardUtilityAllowance)
+                          .toString() +
+                      ") and then subtract half your adjusted income."),
+                  Text(
+                      "7c. If this amount is greater to or equal than \$586, your shelter excess deduction is \$586. If you have elderly (age 60 and over) or disabled household members, your deduction is the full amount instead of \$586. If the amount is negative, or if you are homeless (" +
+                          widget.model.yourHomelessnessStatus.toString() +
+                          "), your deduction for this section is \$0."),
+                  Text(
+                      "\n8. Subtract the shelter excess calculated in step 7 (\$" +
+                          widget.model.yourShelterExcess.toString() +
+                          ") from your adjusted income calculated."),
+                  Text("\n9. That leaves you with your net income (\$" +
+                      widget.model.yourNetIncome.toString() +
+                      "). You are expected to put 30% of this figure towards food, which is subtracted from your maximum possible benefit of \$" +
+                      widget.model.yourMax.toString() +
+                      ". That leaves a final estimated monthly benefit of \$" +
+                      widget.model.yourNYBenefit.toString() +
+                      ".\n"),
+                  ExpansionTile(
+                    title: Column(children: <Widget>[
+                      Text('Additional flexibilities and NJ state waivers:')
+                    ]),
+                    children: <Widget>[
+                      Text("""
+                    \nFNS Page (many nationwide waivers in the middle of page): https://www.fns.usda.gov/disaster/pandemic/covid-19/new-jersey#snap 
+                    
+Application processing changes:
+- Certification periods extended
+- Periodic reporting waived
+- Interview requirements changed:
+  - face-to-face interviews waived
+  - initial and recertification
+     interviews waived
+  - expedited service interviews
+     postponed  
+                    """),
+                    ],
+                  ),
+                  Text(
+                      "\n\nTo see where we researched the calculations and deductions, and more, look in the Resources tab.")
+                ],
+              ),
+            
       ),
       actions: <Widget>[
         new FlatButton(
@@ -563,7 +883,7 @@ Earned and unearned income constitutes the total countable income before any ded
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                             Text(
-                                "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs or inaccuracies please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York and Connecticut done-- more to come soon) "),
+                                "This is the advanced calculator. We make no guarantees for the accuracy or timeliness of this application, nor will we be responsible for any decisions made based on the estimates provided here. Use this tool to get a general idea of your potential benefit, but if you have any questions at all you should go receive an official estimate. \n\nWe will try our best to keep the information accurate and timely. If there are any bugs or inaccuracies please report them to us using the contact information in the resources section. \n\nSelect your state below to open our estimator tool designed around your state's policies. (Right now, we only have New York, New Jersey and Connecticut done-- more to come soon) "),
                             DropdownButton<String>(
                               value: dropdownValue,
                               icon: Icon(Icons.arrow_downward),
@@ -581,11 +901,14 @@ Earned and unearned income constitutes the total countable income before any ded
                                     showNYPopup(context);
                                   if (dropdownValue == 'Connecticut')
                                     showCTPopup(context);
+                                  if (dropdownValue == 'New Jersey')
+                                    showNJPopup(context);
                                 });
                               },
                               items: <String>[
                                 'New York',
-                                'Connecticut'
+                                'Connecticut',
+                                'New Jersey',
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -1204,6 +1527,623 @@ Earned and unearned income constitutes the total countable income before any ded
                                   context: context,
                                   builder: (BuildContext context) =>
                                       _buildAboutAdvancedNY(context),
+                                );
+                                // Perform some action
+                              },
+                            ),
+                          ]),
+                    ),
+                  ));
+            })));
+    setState(() {});
+  }
+
+  showNJPopup(BuildContext context, {BuildContext popupContext}) {
+    Navigator.push(
+        context,
+        PopupLayout(
+            top: 30,
+            left: 30,
+            right: 30,
+            bottom: 50,
+            child: StatefulBuilder(builder: (context, setState) {
+              //this is all the stuff going in the advanced ny deduction section in the popup. Maybe add an option to look at more states soon
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('NJ Advanced Deduction Guide'),
+                    leading: new Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context); //close the popup
+                          } catch (e) {}
+                        },
+                      );
+                    }),
+                    brightness: Brightness.light,
+                  ),
+                  resizeToAvoidBottomPadding: false,
+                  body: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                                "Questions? \nHit show calculation at bottom for clarification and help.\n"),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.person),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How many people live in your household? ',
+                                  labelText: 'Household size: '),
+                              onChanged: (String householdSize) {
+                                if (!(householdSize.contains('@') ||
+                                    householdSize
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    householdSize
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (householdSize == null &&
+                                        int.tryParse(householdSize) == null))) {
+                                  setState(() {
+                                    widget.model.yourHouseholdSize =
+                                        int.parse(householdSize);
+                                    widget.model.updateMax();
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String householdSize) {
+                                if (!(householdSize.contains('@') ||
+                                    householdSize
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    householdSize
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (householdSize == null &&
+                                        int.tryParse(householdSize) == null))) {
+                                  setState(() {
+                                    widget.model.yourHouseholdSize =
+                                        int.parse(householdSize);
+                                    widget.model.updateMax();
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String householdSizeValidator) {
+                                if (householdSizeValidator.contains('@') ||
+                                    householdSizeValidator.contains('.') ||
+                                    householdSizeValidator
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    householdSizeValidator
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (householdSizeValidator == null &&
+                                        int.tryParse(householdSizeValidator) ==
+                                            null)) {
+                                  widget.model.yourHouseholdSize = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return householdSizeValidator.contains('@') ||
+                                        householdSizeValidator.contains('.') ||
+                                        householdSizeValidator
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        householdSizeValidator
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (householdSizeValidator == null &&
+                                            int.tryParse(
+                                                    householdSizeValidator) ==
+                                                null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.child_care),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much child support do you pay monthly? ',
+                                  labelText:
+                                      'Monthly child support payment (optional) '),
+                              onChanged: (String childSupport) {
+                                if (!(childSupport.contains('@') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (childSupport == null &&
+                                        double.tryParse(childSupport) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourChildSupport =
+                                        double.parse(childSupport);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String childSupport) {
+                                if (!(childSupport.contains('@') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (childSupport == null &&
+                                        double.tryParse(childSupport) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourChildSupport =
+                                        double.parse(childSupport);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String childSupport) {
+                                if (childSupport.contains('@') ||
+                                    childSupport
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    childSupport
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (childSupport == null &&
+                                        double.tryParse(childSupport) ==
+                                            null)) {
+                                  widget.model.yourChildSupport = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return childSupport.contains('@') ||
+                                        childSupport
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        childSupport
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (childSupport == null &&
+                                            double.tryParse(childSupport) ==
+                                                null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.attach_money),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much of your monthly income is unearned? (income gained passively from savings, rent, benefits, etc.)',
+                                  labelText: 'Unearned monthly income '),
+                              onChanged: (String inputtedIncome) {
+                                if (!(inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourUnearnedIncome =
+                                        (double.parse(inputtedIncome));
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedIncome) {
+                                if (inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null)) {
+                                  widget.model.yourUnearnedIncome = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return (inputtedIncome
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedIncome
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedIncome == null &&
+                                            double.tryParse(inputtedIncome) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.attach_money),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much of your monthly income is earned? (income from work, not gained passively from savings, rent, or benefits)',
+                                  labelText: 'Earned monthly income '),
+                              onChanged: (String inputtedIncome) {
+                                if (!(inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourEarnedIncome =
+                                        (double.parse(inputtedIncome));
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String inputtedIncome) {
+                                if (!(inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourEarnedIncome =
+                                        (double.parse(inputtedIncome));
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedIncome) {
+                                if (inputtedIncome
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedIncome
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedIncome == null &&
+                                        double.tryParse(inputtedIncome) ==
+                                            null)) {
+                                  widget.model.yourEarnedIncome = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return (inputtedIncome
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedIncome
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedIncome == null &&
+                                            double.tryParse(inputtedIncome) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.child_friendly),
+                                border: InputBorder.none,
+                                hintText:
+                                    'Care for children under 18 or disabled household members of any age ',
+                                labelText: 'Dependent care costs',
+                                labelStyle: TextStyle(fontSize: 15),
+                              ),
+                              onChanged: (String inputtedCare) {
+                                if (!(inputtedCare
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedCare
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedCare == null &&
+                                        double.tryParse(inputtedCare) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourDependentCareCosts =
+                                        double.parse(inputtedCare);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String inputtedCare) {
+                                if (!(inputtedCare
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedCare
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedCare == null &&
+                                        double.tryParse(inputtedCare) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourDependentCareCosts =
+                                        double.parse(inputtedCare);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedCare) {
+                                if (inputtedCare
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedCare
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedCare == null &&
+                                        double.tryParse(inputtedCare) ==
+                                            null)) {
+                                  widget.model.yourDependentCareCosts = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return (inputtedCare
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedCare
+                                            .contains(new RegExp(r'[a-z]')))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("Check if you are homeless"),
+                                Checkbox(
+                                  value: widget.model.yourHomelessnessStatus,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      widget.model.yourHomelessnessStatus =
+                                          value;
+                                      widget.model.updateNJBenefit();
+                                    });
+                                  },
+                                ),
+                                Text(
+                                    "Check if you are disabled or elderly or if you have disabled or elderly household members"),
+                                Checkbox(
+                                  value: widget.model.disabledOrElderly,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      widget.model.disabledOrElderly = value;
+                                      widget.model.updateNJBenefit();
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.local_hospital),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much do you pay per month for medical expenses for elderly or disabled household members? (costs not reimbursed by Title XVIII (Medicare) or XIX (Medicaid))',
+                                  labelText:
+                                      'Medical expenses for elderly or disabled'),
+                              onChanged: (String inputtedMedical) {
+                                if (!(inputtedMedical
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedMedical
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedMedical == null &&
+                                        double.tryParse(inputtedMedical) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourMedicalExpenses =
+                                        double.parse(inputtedMedical);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onSaved: (String inputtedMedical) {
+                                if (!(inputtedMedical
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedMedical
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedMedical == null &&
+                                        double.tryParse(inputtedMedical) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourMedicalExpenses =
+                                        double.parse(inputtedMedical);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedMedical) {
+                                if (inputtedMedical
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedMedical
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedMedical == null &&
+                                        double.tryParse(inputtedMedical) ==
+                                            null)) {
+                                  widget.model.yourMedicalExpenses = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return (inputtedMedical
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedMedical
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        inputtedMedical == null)
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.home),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much do you pay for rent/mortgage each month? ',
+                                  labelText: 'Rent/mortgage '),
+                              onSaved: (String inputtedRent) {
+                                if (!(inputtedRent
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedRent
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedRent == null &&
+                                        double.tryParse(inputtedRent) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourRentOrMortgage =
+                                        double.parse(inputtedRent);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onChanged: (String inputtedRent) {
+                                if (!(inputtedRent
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedRent
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedRent == null &&
+                                        double.tryParse(inputtedRent) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourRentOrMortgage =
+                                        double.parse(inputtedRent);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedRent) {
+                                if (inputtedRent
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedRent
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedRent == null &&
+                                        double.tryParse(inputtedRent) ==
+                                            null)) {
+                                  widget.model.yourRentOrMortgage = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return (inputtedRent
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedRent
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedRent == null &&
+                                            double.tryParse(inputtedRent) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            Text(
+                                '\nWhere in the state do you live? (used to determine standard utility allowances)\n'),
+                            Column(
+                              children: widget.choices.map((item) {
+                                //change index of choices array as you need
+                                return RadioListTile(
+                                  groupValue: widget.model.yourArea,
+                                  title: Text(item),
+                                  value: item,
+                                  activeColor: Colors.blue,
+                                  onChanged: (val) {
+                                    print(val);
+                                    setState(() {
+                                      widget.model.yourArea = val;
+                                      widget.model.updateNJBenefit();
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            Text(
+                                '\nDo you have heating or cooling costs, or utility costs? (used to determine standard utility allowances\n'),
+                            Column(
+                              children: widget.choices2.map((item) {
+                                //change index of choices array as you need
+                                return RadioListTile(
+                                  groupValue: widget
+                                      .model.yourStandardUtilityAllowanceLevel,
+                                  title: Text(item),
+                                  value: item,
+                                  activeColor: Colors.blue,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      widget.model
+                                              .yourStandardUtilityAllowanceLevel =
+                                          val;
+                                      widget.model.updateNJBenefit();
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            new TextFormField(
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.add),
+                                  border: InputBorder.none,
+                                  hintText:
+                                      'How much do you pay in other (non-utility/rent/mortgage) shelter costs? ',
+                                  labelText:
+                                      'Other shelter expenses (non-utility/rent) '),
+                              onSaved: (String inputtedShelter) {
+                                if (!(inputtedShelter
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedShelter
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedShelter == null &&
+                                        double.tryParse(inputtedShelter) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourOtherShelterCosts =
+                                        double.parse(inputtedShelter);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              onChanged: (String inputtedShelter) {
+                                if (!(inputtedShelter
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedShelter
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedShelter == null &&
+                                        double.tryParse(inputtedShelter) ==
+                                            null))) {
+                                  setState(() {
+                                    widget.model.yourOtherShelterCosts =
+                                        double.parse(inputtedShelter);
+                                    widget.model.updateNJBenefit();
+                                  });
+                                }
+                              },
+                              validator: (String inputtedShelter) {
+                                if (inputtedShelter
+                                        .contains(new RegExp(r'[A-Z]')) ||
+                                    inputtedShelter
+                                        .contains(new RegExp(r'[a-z]')) ||
+                                    (inputtedShelter == null &&
+                                        double.tryParse(inputtedShelter) ==
+                                            null)) {
+                                  widget.model.yourOtherShelterCosts = 0;
+                                  widget.model.updateNJBenefit();
+                                }
+                                return (inputtedShelter
+                                            .contains(new RegExp(r'[A-Z]')) ||
+                                        inputtedShelter
+                                            .contains(new RegExp(r'[a-z]')) ||
+                                        (inputtedShelter == null &&
+                                            double.tryParse(inputtedShelter) ==
+                                                null))
+                                    ? 'Only use numbers.'
+                                    : null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                            ),
+                            new RaisedButton(
+                              child: const Text('Manually Update Benefit'),
+                              color: Theme.of(context).accentColor,
+                              elevation: 4.0,
+                              splashColor: Colors.amberAccent,
+                              textColor: const Color(0xFFFFFFFF),
+                              onPressed: () {
+                                widget.model.updateNJBenefit();
+                                // Perform some action
+                              },
+                            ),
+                            Text(
+                              '(updates happen automatically after every change)',
+                              style: TextStyle(fontSize: 8),
+                            ),
+                            new RaisedButton(
+                              child:
+                                  const Text('Show Benefit and Calculations'),
+                              color: Theme.of(context).accentColor,
+                              elevation: 4.0,
+                              splashColor: Colors.amberAccent,
+                              textColor: const Color(0xFFFFFFFF),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      _buildAboutAdvancedNJ(context),
                                 );
                                 // Perform some action
                               },
